@@ -1,18 +1,26 @@
-# vue-simple-template
+# vue-datepicker
 
-> A Vue.js project
+> 使用官方提供的vue-simple-template配置打包，写的一个简单的vue-datepicker。目前只有一个简单的展示切换功能，还非常简单简陋，有待完善
 
-## Build Setup
+## 效果预览
+
+ ![vue-datepicker](D:\Administrator\Desktop\vue-datepicker.gif)
+
+## 项目构建
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 注意：安装依赖之前，请确保已全局安装vue,vue-cli,webpack
+npm install -g vue vue-cli webpack
+
+# 运行项目=>localhost:8080
 npm run dev
 
-# build for production with minification
-npm run build
+# 更多的构建信息请参考官网
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 参考
+
+待整理...
