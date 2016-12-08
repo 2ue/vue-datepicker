@@ -4,7 +4,7 @@
 
 ## 效果预览
 
- ![vue-datepicker](D:\Administrator\Desktop\vue-datepicker.gif)
+ ![vue-datepicker](https://github.com/2ue/vue-datepicker/blob/master/src/gifShow/vue-datepicker.gif)
 
 ## 项目构建
 
