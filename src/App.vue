@@ -1,6 +1,10 @@
 <template>
     <div id="app">
-        <div class="datePicker f_disselected">
+        <div class="datePikcerInputBoX">
+            <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="hasDay" readonly>
+            <span @click="clearChoosedTime">清空</span>
+        </div>
+        <div class="datePicker f_disselected" @mouseover="clearTimeWarpQue" @mouseout="hideDatePicker" v-if="showDatePickerBox">
             <div class="datePickerHead" @mouseout="hideChooseBox()" @mouseover="clearTimeQue()">
                 <span @click="preMonth()" class="changeMomth">&lt;</span>
                 <span @click="showChooseYearBox()" class="chooseYearMonth">{{ year }}</span>
@@ -27,7 +31,7 @@
                 <p class="datePickerNum">
                     <span
                         class="day"
-                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isToday}"
+                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isToday || item.isChoosed}"
                         v-for="(item,index) in days"
                         @click="chooseDay(index)
                     ">{{ item.dayNum }}</span>
@@ -38,17 +42,20 @@
 </template>
 
 <script>
-    // import Choosebox from 'chooseBox';
     export default {
         name: 'app',
         data () {
             return {
+                message: '请选择时间',
                 year: curYear,
                 month: curMonth + 1,
+                hasDay:'',
                 items: [], //选择年月存放数据
                 days:getDayArry(curYear, curMonth + 1),
                 showChooseBox: false, //选择年月容器状态
-                timer: '', //定时器
+                showDatePickerBox: false, //日历容器
+                chooseBoxTimer: '', //定时器
+                datePickerBoxTimer: '', //定时器
                 chooseType: false, //选择年月界定，false为月(month)，true为年(year)
                 weekdayArry: ['日','一','二','三','四','五','六'],
                 YearChangeSyboml: curYear //切换年月时标记
@@ -56,14 +63,14 @@
         },
         computed: {
             days: function () {//生成当前月的日期数据
-                var self = this;
-                return getDayArry(self.year, self.month);
+                const self = this;
+                return getDayArry(self.year, self.month, this.hasDay);
             },
             items: function () {
-                var self = this;
-                var tempArry = [];
-                var startNum = self.chooseType ? self.YearChangeSyboml - 4 : 1;
-                var endNum = self.chooseType ? self.YearChangeSyboml + 4 : 12;
+                const self = this;
+                const tempArry = [];
+                const startNum = self.chooseType ? self.YearChangeSyboml - 4 : 1;
+                const endNum = self.chooseType ? self.YearChangeSyboml + 4 : 12;
                 for(var i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
@@ -72,57 +79,89 @@
             }
         },
         methods: {
+            //----------- 选择年月面板 START ---------------
             showChooseYearBox: function () {//显示选择年
-                var self = this;
                 this.YearChangeSyboml = this.year;
-                self.showChooseBox = true;
-                self.items = [];
-                self.chooseType = true;
+                this.showChooseBox = true;
+                this.items = [];
+                this.chooseType = true;
             },
             showChooseMonthBox: function () {//显示选择月
-                var self = this;
-                self.showChooseBox = true;
-                self.items = [];
-                self.chooseType = false;
+                this.showChooseBox = true;
+                this.items = [];
+                this.chooseType = false;
             },
             hideChooseBox: function (time) {//隐藏选择年月
-                var self = this;
-                var t = time || 300;
-                self.timer = setTimeout(function () {
+                const self = this;
+                const t = time || 300;
+                self.chooseBoxTimer = setTimeout(function () {
                     self.showChooseBox = false;
                 }, t);
             },
             clearTimeQue: function () {//清除队列
-                var self = this;
-                clearTimeout(self.timer);
+                clearTimeout(this.chooseBoxTimer);
             },
             chooseYearMonth: function (type,value) {//选择年月
-                var self = this;
-                var chooseType = !!type ? 'year' : 'month';
-                self[chooseType] = value || self[chooseType];
+                const chooseType = !!type ? 'year' : 'month';
+                this[chooseType] = value || this[chooseType];
                 this.hideChooseBox(1);
             },
+            //----------- 选择年月面板 END ---------------
+            //
+            //----------- 时间选择面板 START ---------------
+            showDatePicker: function (event) {//显示选择年
+                var value = event.target.value;
+                var isChoosed = value.indexOf('-') > 0;
+                this.showDatePickerBox = true;
+                if(!isChoosed) return;
+                this.year = value.split('-')[0];
+                this.month = value.split('-')[1];
+                this.hasDay = value.split('-')[2];
+            },
+            hideDatePicker: function (time) {
+                const self = this;
+                const t = time || 300;
+                self.datePickerBoxTimer = setTimeout(function () {
+                    self.showDatePickerBox = false;
+                }, t)
+            },
+            clearTimeWarpQue: function () {
+                clearTimeout(this.datePickerBoxTimer);
+            },
+            //----------- 时间选择面板 END ---------------
+            //
+            //----------- 切换月 START ---------------
             preMonth: function () {//上一月
-                var isFirstMonth = this.month == 1;
+                const isFirstMonth = this.month == 1;
                 this.month = isFirstMonth ? 12 : this.month - 1;
                 this.year = isFirstMonth ? this.year - 1 : this.year;
             },
             nxtMonth: function () {//下一月
-                var isLastMonth = this.month == 12;
+                const isLastMonth = this.month == 12;
                 this.month = isLastMonth ? 1 : this.month + 1;
                 this.year = isLastMonth ? this.year + 1 : this.year;
             },
+            //----------- 切换月 END ---------------
             changeYearPagePre: function () {//年翻页：上一页
-                var self = this;
-                self.YearChangeSyboml = self.YearChangeSyboml - 12;
+                this.YearChangeSyboml = this.YearChangeSyboml - 12;
             },
             changeYearPageNxt: function () {//年翻页：下一页
-                var self = this;
-                self.YearChangeSyboml = self.YearChangeSyboml + 12;
+                this.YearChangeSyboml = this.YearChangeSyboml + 12;
             },
             chooseDay: function (index) {//选择天
                 if(!!!index && index != 0) return;
+                if(!this.days[index].isCurMonth) return;
                 this.days[index].color = !this.days[index].color;
+                this.message = this.year + '-' + this.month + '-' + this.days[index].dayNum;
+                this.hasDay = this.days[index].dayNum;
+                this.showDatePickerBox = false;
+            },
+            //清空选择
+            clearChoosedTime: function(){
+                this.message = '请选择时间...';
+                this.year = curYear;
+                this.month = curMonth + 1;
+                this.hasDay = '';
             }
         }
     };
@@ -131,7 +170,7 @@
     var curYear = curDate.getFullYear();
     var curMonth = curDate.getMonth();
     var curDay = curDate.getDate();
-    function getDayArry(year, month) {
+    function getDayArry(year, month, hasDay) {
         //获取当前月天数数组
         var curMonthDays = getMonthDays(month);
         var preMonthDays = getMonthDays(month == 0 ? 11 : month - 1);
@@ -142,12 +181,15 @@
         for(var i = 1; i <= allDays; i++){
             var isPre = i <= firstDay;
             var isNxt = i > (firstDay + curMonthDays);
-            // var isToday = curDay == (i - firstDay);
+            var day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
+            var isCurMonth = !isPre && !isNxt;
+            console.log(isCurMonth)
             dayArry.push({
-                dayNum: isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay,
-                isToday: curDay == (i - firstDay) && curMonth == (month - 1) && curYear == year,
+                dayNum: day,
+                isToday: !hasDay ? curDay == (i - firstDay) && curMonth == (month - 1) && curYear == year : false && isCurMonth,
+                isChoosed: !!hasDay && hasDay == day && isCurMonth,
                 isSpecailDay: false,
-                isCurMonth: !isPre && !isNxt,
+                isCurMonth: isCurMonth,
                 color: false
             })
         };
@@ -170,6 +212,10 @@
 
 <style>
     @import url('css/public.css');
+    .datePikcerInputBoX{position: relative;width: 360px;}
+    .chooseTimeInput{width:360px;height:35px;line-height:35px;border: 1px solid #eee;font-size: 14px;text-indent: 1em;cursor: pointer;}
+    .datePikcerInputBoX span{position: absolute;top: 0;right: 0;display: inline-block;height: 100%;line-height: 35px;padding: 0 10px;border-left: 1px solid #eee;cursor: pointer;}
+    .datePicker{margin-top:10px;}
     .pageBox{margin: 100px;}
     .datePicker{width:350px;border: 1px solid #eee;padding: 5px;}
     .datePickerHead{/*height: 30px;*/color: #999;text-align: center;width: 100%;position: relative;margin-bottom: 10px;border-bottom: 1px solid #eee;cursor: pointer;font-size: 0;}
