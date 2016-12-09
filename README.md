@@ -9,11 +9,11 @@
 ## 项目构建
 
 ``` bash
+#全局安装vue,vue-cli,webpack，如以安装则跳过
+npm install -g vue vue-cli webpack
+
 # 安装依赖
 npm install
-
-# 注意：安装依赖之前，请确保已全局安装vue,vue-cli,webpack
-npm install -g vue vue-cli webpack
 
 # 运行项目=>localhost:8080
 npm run dev
