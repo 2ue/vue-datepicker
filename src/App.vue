@@ -1,42 +1,40 @@
 <template>
-    <div id="app">
-        <div class="datePikcerInputBoX">
-            <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="hasDay" readonly>
-            <span @click="clearChoosedTime">清空</span>
-        </div>
-        <div class="datePicker f_disselected" @mouseover="clearTimeWarpQue" @mouseout="hideDatePicker" v-if="showDatePickerBox">
-            <div class="datePickerHead" @mouseout="hideChooseBox()" @mouseover="clearTimeQue()">
-                <span @click="preMonth()" class="changeMomth">&lt;</span>
-                <span @click="showChooseYearBox()" class="chooseYearMonth">{{ year }}</span>
-                <span @click="showChooseMonthBox()" class="chooseYearMonth">{{ month }}</span>
-                <span @click="nxtMonth()" class="changeMomth">&gt;</span>
-                <!-- <Choosebox></Choosebox> -->
-                <div class="chooseBox"
-                    :class="{'chooseYearBox':chooseType}"
-                    v-show="showChooseBox">
-                    <p class="yearPage" v-if="chooseType">
-                        <span @click="changeYearPagePre()">&lt;</span>
-                        <span @click="changeYearPageNxt()">&gt;</span>
-                    </p>
-                    <span class="item"
-                        v-for="(item,index) in items"
-                        @mouseover="clearTimeQue()"
-                        @mouseout.stop="hideChooseBox(500)"
-                        @click="chooseYearMonth(chooseType,item)"
-                    >{{item}}</span>
-                </div>
-            </div>
-            <div class="datePickerBody">
-                <p><span v-for="(weekday,index) in weekdayArry" class="weekday">{{ weekday }}</span></p>
-                <p class="datePickerNum">
-                    <span
-                        class="day"
-                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isToday || item.isChoosed}"
-                        v-for="(item,index) in days"
-                        @click="chooseDay(index)
-                    ">{{ item.dayNum }}</span>
+    <div class="datePikcerInputBoX">
+        <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="hasDay" readonly>
+        <span @click="clearChoosedTime">清空</span>
+    </div>
+    <div class="datePicker f_disselected" @mouseover="clearTimeWarpQue" @mouseout="hideDatePicker" v-if="showDatePickerBox">
+        <div class="datePickerHead" @mouseout="hideChooseBox()" @mouseover="clearTimeQue()">
+            <span @click="preMonth()" class="changeMomth">&lt;</span>
+            <span @click="showChooseYearBox()" class="chooseYearMonth">{{ year }}</span>
+            <span @click="showChooseMonthBox()" class="chooseYearMonth">{{ month }}</span>
+            <span @click="nxtMonth()" class="changeMomth">&gt;</span>
+            <!-- <Choosebox></Choosebox> -->
+            <div class="chooseBox"
+                :class="{'chooseYearBox':chooseType}"
+                v-show="showChooseBox">
+                <p class="yearPage" v-if="chooseType">
+                    <span @click="changeYearPagePre()">&lt;</span>
+                    <span @click="changeYearPageNxt()">&gt;</span>
                 </p>
+                <span class="item"
+                    v-for="(item,index) in items"
+                    @mouseover="clearTimeQue()"
+                    @mouseout.stop="hideChooseBox(500)"
+                    @click="chooseYearMonth(chooseType,item)"
+                >{{item}}</span>
             </div>
+        </div>
+        <div class="datePickerBody">
+            <p><span v-for="(weekday,index) in weekdayArry" class="weekday">{{ weekday }}</span></p>
+            <p class="datePickerNum">
+                <span
+                    class="day"
+                    :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isToday || item.isChoosed}"
+                    v-for="(item,index) in days"
+                    @click="chooseDay(index)
+                ">{{ item.dayNum }}</span>
+            </p>
         </div>
     </div>
 </template>
@@ -157,7 +155,7 @@
             },
             //清空选择
             clearChoosedTime: function(){
-                this.message = '请选择时间...';
+                this.message = '请选择时间';
                 this.year = curYear;
                 this.month = curMonth + 1;
                 this.hasDay = '';
