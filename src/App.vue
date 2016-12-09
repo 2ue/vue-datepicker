@@ -69,8 +69,8 @@
             items: function () {
                 const self = this;
                 const tempArry = [];
-                const startNum = self.chooseType ? self.YearChangeSyboml - 4 : 1;
-                const endNum = self.chooseType ? self.YearChangeSyboml + 4 : 12;
+                const startNum = self.chooseType ? +self.YearChangeSyboml - 4 : 1;
+                const endNum = self.chooseType ? +self.YearChangeSyboml + 4 : 12;
                 for(var i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
@@ -110,13 +110,12 @@
             //
             //----------- 时间选择面板 START ---------------
             showDatePicker: function (event) {//显示选择年
-                var value = event.target.value;
-                var isChoosed = value.indexOf('-') > 0;
+                const value = event.target.value;
+                const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [this.year, this.month, this.hasDay];
                 this.showDatePickerBox = true;
-                if(!isChoosed) return;
-                this.year = value.split('-')[0];
-                this.month = value.split('-')[1];
-                this.hasDay = value.split('-')[2];
+                this.year = choosedDayArry[0];
+                this.month = choosedDayArry[1];
+                this.hasDay = choosedDayArry[2];
             },
             hideDatePicker: function (time) {
                 const self = this;
@@ -181,9 +180,8 @@
         for(var i = 1; i <= allDays; i++){
             var isPre = i <= firstDay;
             var isNxt = i > (firstDay + curMonthDays);
-            var day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
             var isCurMonth = !isPre && !isNxt;
-            console.log(isCurMonth)
+            var day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
             dayArry.push({
                 dayNum: day,
                 isToday: !hasDay ? curDay == (i - firstDay) && curMonth == (month - 1) && curYear == year : false && isCurMonth,
