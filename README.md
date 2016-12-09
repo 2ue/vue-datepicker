@@ -1,6 +1,6 @@
 # vue-datepicker
 
-> 使用官方提供的vue-simple-template配置打包，写的一个简单的vue-datepicker。目前只有一个简单的展示切换功能，还非常简单简陋，有待完善
+> 使用官方提供的vue-simple-template配置打包，写的一个简单的vue-datepicker。支持选择功能，功能比较简单，欢迎大家拍砖.
 
 ## 效果预览
 
