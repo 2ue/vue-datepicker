@@ -23,18 +23,18 @@ npm run dev
 
 ## 更新记录
 
+2017-2-10 15:14:43
+
+- 修正选择日期后高亮错误问题
+- 修正多出方法中计算时数字会被转化成字符串问题
+
 2016-12-9 10:12:58
 
 - 更新效果图
-
-
-- 修正computed计算items时字符串问题
-
+- 修正computed计算时数字会被转化成字符串问题
   ``` javascript
-  // APP.vue  72行：+自转换self.YearChangeSyboml为数值类型，防止以字符串形式拼接
   const startNum = self.chooseType ? +self.YearChangeSyboml - 4 : 1;
   ```
-
 2016-12-8 17:30:04
 
 - 增加输入框唤醒日历
