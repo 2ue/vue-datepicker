@@ -2,7 +2,7 @@
 
 > 使用官方提供的vue-simple-template配置打包，写的一个简单的vue-datepicker。支持选择功能，功能比较简单，欢迎大家拍砖.
 
-## 效果预览
+## 效果预览([demo](https://2ue.github.io/vue-datepicker))
 
  ![vue-datepicker](https://github.com/2ue/vue-datepicker/blob/master/src/gifShow/vue-datepicker2.gif)
 

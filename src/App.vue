@@ -1,7 +1,11 @@
 <template>
     <div id="app">
         <div class="datePikcerInputBoX">
+<<<<<<< HEAD
             <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="choosedDay" readonly>
+=======
+            <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="hasDay" readonly>
+>>>>>>> 1917c394481f3c6ac99fb51d30349c33fb53a94b
             <span @click="clearChoosedTime">清空</span>
         </div>
         <div class="datePicker f_disselected" @mouseover="clearTimeWarpQue" @mouseout="hideDatePicker" v-if="showDatePickerBox">
@@ -31,7 +35,11 @@
                 <p class="datePickerNum">
                     <span
                         class="day"
+<<<<<<< HEAD
                         :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && isChoosed}"
+=======
+                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isToday || item.isChoosed}"
+>>>>>>> 1917c394481f3c6ac99fb51d30349c33fb53a94b
                         v-for="(item,index) in days"
                         @click="chooseDay(index)
                     ">{{ item.dayNum }}</span>
@@ -228,7 +236,7 @@
 </script>
 
 <style>
-    @import url('css/public.css');
+    @import url('./css/public.css');
     .datePikcerInputBoX{position: relative;width: 360px;}
     .chooseTimeInput{width:360px;height:35px;line-height:35px;border: 1px solid #eee;font-size: 14px;text-indent: 1em;cursor: pointer;}
     .datePikcerInputBoX span{position: absolute;top: 0;right: 0;display: inline-block;height: 100%;line-height: 35px;padding: 0 10px;border-left: 1px solid #eee;cursor: pointer;}
