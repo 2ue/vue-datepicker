@@ -1,40 +1,42 @@
 <template>
-    <div class="datePikcerInputBoX">
-        <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="hasDay" readonly>
-        <span @click="clearChoosedTime">清空</span>
-    </div>
-    <div class="datePicker f_disselected" @mouseover="clearTimeWarpQue" @mouseout="hideDatePicker" v-if="showDatePickerBox">
-        <div class="datePickerHead" @mouseout="hideChooseBox()" @mouseover="clearTimeQue()">
-            <span @click="preMonth()" class="changeMomth">&lt;</span>
-            <span @click="showChooseYearBox()" class="chooseYearMonth">{{ year }}</span>
-            <span @click="showChooseMonthBox()" class="chooseYearMonth">{{ month }}</span>
-            <span @click="nxtMonth()" class="changeMomth">&gt;</span>
-            <!-- <Choosebox></Choosebox> -->
-            <div class="chooseBox"
-                :class="{'chooseYearBox':chooseType}"
-                v-show="showChooseBox">
-                <p class="yearPage" v-if="chooseType">
-                    <span @click="changeYearPagePre()">&lt;</span>
-                    <span @click="changeYearPageNxt()">&gt;</span>
-                </p>
-                <span class="item"
-                    v-for="(item,index) in items"
-                    @mouseover="clearTimeQue()"
-                    @mouseout.stop="hideChooseBox(500)"
-                    @click="chooseYearMonth(chooseType,item)"
-                >{{item}}</span>
-            </div>
+    <div id="app">
+        <div class="datePikcerInputBoX">
+            <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="choosedDay" readonly>
+            <span @click="clearChoosedTime">清空</span>
         </div>
-        <div class="datePickerBody">
-            <p><span v-for="(weekday,index) in weekdayArry" class="weekday">{{ weekday }}</span></p>
-            <p class="datePickerNum">
-                <span
-                    class="day"
-                    :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isToday || item.isChoosed}"
-                    v-for="(item,index) in days"
-                    @click="chooseDay(index)
-                ">{{ item.dayNum }}</span>
-            </p>
+        <div class="datePicker f_disselected" @mouseover="clearTimeWarpQue" @mouseout="hideDatePicker" v-if="showDatePickerBox">
+            <div class="datePickerHead" @mouseout="hideChooseBox()" @mouseover="clearTimeQue()">
+                <span @click="preMonth()" class="changeMomth">&lt;</span>
+                <span @click="showChooseYearBox()" class="chooseYearMonth">{{ year }}</span>
+                <span @click="showChooseMonthBox()" class="chooseYearMonth">{{ month }}</span>
+                <span @click="nxtMonth()" class="changeMomth">&gt;</span>
+                <!-- <Choosebox></Choosebox> -->
+                <div class="chooseBox"
+                    :class="{'chooseYearBox':chooseType}"
+                    v-show="showChooseBox">
+                    <p class="yearPage" v-if="chooseType">
+                        <span @click="changeYearPagePre()">&lt;</span>
+                        <span @click="changeYearPageNxt()">&gt;</span>
+                    </p>
+                    <span class="item"
+                        v-for="(item,index) in items"
+                        @mouseover="clearTimeQue()"
+                        @mouseout.stop="hideChooseBox(500)"
+                        @click="chooseYearMonth(chooseType,item)"
+                    >{{item}}</span>
+                </div>
+            </div>
+            <div class="datePickerBody">
+                <p><span v-for="(weekday,index) in weekdayArry" class="weekday">{{ weekday }}</span></p>
+                <p class="datePickerNum">
+                    <span
+                        class="day"
+                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && isChoosed}"
+                        v-for="(item,index) in days"
+                        @click="chooseDay(index)
+                    ">{{ item.dayNum }}</span>
+                </p>
+            </div>
         </div>
     </div>
 </template>
@@ -47,7 +49,8 @@
                 message: '请选择时间',
                 year: curYear,
                 month: curMonth + 1,
-                hasDay:'',
+                choosedDay:'',
+                isChoosed: true,
                 items: [], //选择年月存放数据
                 days:getDayArry(curYear, curMonth + 1),
                 showChooseBox: false, //选择年月容器状态
@@ -62,7 +65,7 @@
         computed: {
             days: function () {//生成当前月的日期数据
                 const self = this;
-                return getDayArry(self.year, self.month, this.hasDay);
+                return getDayArry(self.year, self.month, this.choosedDay);
             },
             items: function () {
                 const self = this;
@@ -109,11 +112,12 @@
             //----------- 时间选择面板 START ---------------
             showDatePicker: function (event) {//显示选择年
                 const value = event.target.value;
-                const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [this.year, this.month, this.hasDay];
+                const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [this.year, this.month, this.choosedDay];
                 this.showDatePickerBox = true;
                 this.year = choosedDayArry[0];
                 this.month = choosedDayArry[1];
-                this.hasDay = choosedDayArry[2];
+                this.choosedDay = choosedDayArry[2];
+                this.isChoosed = true;
             },
             hideDatePicker: function (time) {
                 const self = this;
@@ -132,25 +136,29 @@
                 const isFirstMonth = this.month == 1;
                 this.month = isFirstMonth ? 12 : this.month - 1;
                 this.year = isFirstMonth ? this.year - 1 : this.year;
+                this.isChoosed = false;
             },
             nxtMonth: function () {//下一月
                 const isLastMonth = this.month == 12;
-                this.month = isLastMonth ? 1 : this.month + 1;
-                this.year = isLastMonth ? this.year + 1 : this.year;
+                this.month = isLastMonth ? 1 : +this.month + 1;
+                this.year = isLastMonth ? +this.year + 1 : this.year;
+                this.isChoosed = false;
             },
             //----------- 切换月 END ---------------
             changeYearPagePre: function () {//年翻页：上一页
                 this.YearChangeSyboml = this.YearChangeSyboml - 12;
+                this.isChoosed = false;
             },
             changeYearPageNxt: function () {//年翻页：下一页
-                this.YearChangeSyboml = this.YearChangeSyboml + 12;
+                this.YearChangeSyboml = +this.YearChangeSyboml + 12;
+                this.isChoosed = false;
             },
             chooseDay: function (index) {//选择天
                 if(!!!index && index != 0) return;
                 if(!this.days[index].isCurMonth) return;
                 this.days[index].color = !this.days[index].color;
                 this.message = this.year + '-' + this.month + '-' + this.days[index].dayNum;
-                this.hasDay = this.days[index].dayNum;
+                this.choosedDay = this.days[index].dayNum;
                 this.showDatePickerBox = false;
             },
             //清空选择
@@ -158,7 +166,7 @@
                 this.message = '请选择时间';
                 this.year = curYear;
                 this.month = curMonth + 1;
-                this.hasDay = '';
+                this.choosedDay = '';
             }
         }
     };
@@ -167,13 +175,13 @@
     var curYear = curDate.getFullYear();
     var curMonth = curDate.getMonth();
     var curDay = curDate.getDate();
-    function getDayArry(year, month, hasDay) {
+    function getDayArry(year, month, choosedDay) {
         //获取当前月天数数组
         var curMonthDays = getMonthDays(month);
         var preMonthDays = getMonthDays(month == 0 ? 11 : month - 1);
         // var nxtMonthDays = getMonthDays(month == 11 ? 0 : month + 1);
         var firstDay = getDayInWeek(year, (month - 1), 1); //当前月第一天是星期几
-        var allDays =  Math.ceil((curMonthDays + 4) / 7) * 7;
+        var allDays =  Math.ceil((+curMonthDays + firstDay) / 7) * 7;
         var dayArry = [];
         for(var i = 1; i <= allDays; i++){
             var isPre = i <= firstDay;
@@ -182,14 +190,27 @@
             var day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
             dayArry.push({
                 dayNum: day,
-                isToday: !hasDay ? curDay == (i - firstDay) && curMonth == (month - 1) && curYear == year : false && isCurMonth,
-                isChoosed: !!hasDay && hasDay == day && isCurMonth,
+                isChoosed: !choosedDay ? (curDay == (i - firstDay) && curMonth == (month - 1) && curYear == year) : choosedDay == (i - firstDay),
                 isSpecailDay: false,
                 isCurMonth: isCurMonth,
                 color: false
             })
         };
         return dayArry;
+        $('body').on('blur', '.input', function(event) {
+            var _self = $(this);
+            var _val = _self.val();
+            if(!_val || !isNaN(_val) || _val.indexOf('.') > 0){//判断是否为空，是否为数字，是否为小数
+                //do something
+                //
+            }else if(_val > 9999){
+                //do something
+                //
+            }else if(_val < 1){
+                //do something
+                //
+            }
+        });
     };
     function getMonthDays(month) {
         //获取某年某月有多少天
