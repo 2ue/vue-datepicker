@@ -8417,14 +8417,20 @@ module.exports = Vue$3;
 //
 //
 
+
+var curDate = new Date();
+var curYear = curDate.getFullYear();
+var curMonth = curDate.getMonth();
+var curDay = curDate.getDate();
+
 /* harmony default export */ exports["default"] = {
     name: 'app',
     data() {
         return {
-            message: '请选择时间',
+            chooseDate: '',
             year: curYear,
             month: curMonth + 1,
-            choosedDay: '',
+            hasChoosedDay: curDay,
             isChoosed: true,
             items: [], //选择年月存放数据
             days: getDayArry(curYear, curMonth + 1),
@@ -8441,7 +8447,7 @@ module.exports = Vue$3;
         days: function () {
             //生成当前月的日期数据
             const self = this;
-            return getDayArry(self.year, self.month, this.choosedDay);
+            return getDayArry(self.year, self.month, this.hasChoosedDay);
         },
         items: function () {
             const self = this;
@@ -8487,19 +8493,20 @@ module.exports = Vue$3;
             const chooseType = !!type ? 'year' : 'month';
             this[chooseType] = value || this[chooseType];
             this.hideChooseBox(1);
+            this.isChoosed = this.highDay();
         },
         //----------- 选择年月面板 END ---------------
         //
         //----------- 时间选择面板 START ---------------
         showDatePicker: function (event) {
-            //显示选择年
+            //显示选择日期
             const value = event.target.value;
-            const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [this.year, this.month, this.choosedDay];
+            const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [curYear, curMonth + 1, curDay];
             this.showDatePickerBox = true;
             this.year = choosedDayArry[0];
             this.month = choosedDayArry[1];
-            this.choosedDay = choosedDayArry[2];
-            this.isChoosed = true;
+            this.hasChoosedDay = choosedDayArry[2];
+            this.isChoosed = this.highDay();
         },
         hideDatePicker: function (time) {
             const self = this;
@@ -8519,50 +8526,58 @@ module.exports = Vue$3;
             const isFirstMonth = this.month == 1;
             this.month = isFirstMonth ? 12 : this.month - 1;
             this.year = isFirstMonth ? this.year - 1 : this.year;
-            this.isChoosed = false;
+            this.isChoosed = this.highDay();
         },
         nxtMonth: function () {
             //下一月
             const isLastMonth = this.month == 12;
             this.month = isLastMonth ? 1 : +this.month + 1;
             this.year = isLastMonth ? +this.year + 1 : this.year;
-            this.isChoosed = false;
+            this.isChoosed = this.highDay();
         },
         //----------- 切换月 END ---------------
         changeYearPagePre: function () {
             //年翻页：上一页
             this.YearChangeSyboml = this.YearChangeSyboml - 12;
-            this.isChoosed = false;
+            this.isChoosed = this.highDay();
         },
         changeYearPageNxt: function () {
             //年翻页：下一页
             this.YearChangeSyboml = +this.YearChangeSyboml + 12;
-            this.isChoosed = false;
+            this.isChoosed = this.highDay();
         },
         chooseDay: function (index) {
             //选择天
             if (!!!index && index != 0) return;
             if (!this.days[index].isCurMonth) return;
             this.days[index].color = !this.days[index].color;
-            this.message = this.year + '-' + this.month + '-' + this.days[index].dayNum;
-            this.choosedDay = this.days[index].dayNum;
+            this.chooseDate = this.year + '-' + this.month + '-' + this.days[index].dayNum;
+            this.hasChoosedDay = this.days[index].dayNum;
             this.showDatePickerBox = false;
         },
         //清空选择
         clearChoosedTime: function () {
-            this.message = '请选择时间';
+            this.chooseDate = '请选择时间';
             this.year = curYear;
             this.month = curMonth + 1;
-            this.choosedDay = '';
+            this.hasChoosedDay = '';
+        },
+        //计算当前日期是否高亮
+        highDay: function () {
+            console.log(this.year);
+            console.log(this.month);
+            console.log(this.hasChoosedDay);
+            console.log(curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay);
+            if (!this.chooseDate) return curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay;
+            const choosedTime = this.chooseDate.split('-');
+            console.log(curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay);
+            if (choosedTime.length != 3) return curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay;
+            return choosedTime[0] == this.year && choosedTime[1] == this.month && choosedTime[2] == this.hasChoosedDay;
         }
     }
 };
 //-------------------------月份数组拼接 START------------------------------------
-var curDate = new Date();
-var curYear = curDate.getFullYear();
-var curMonth = curDate.getMonth();
-var curDay = curDate.getDate();
-function getDayArry(year, month, choosedDay) {
+function getDayArry(year, month, hasChoosedDay) {
     //获取当前月天数数组
     var curMonthDays = getMonthDays(month);
     var preMonthDays = getMonthDays(month == 0 ? 11 : month - 1);
@@ -8577,7 +8592,7 @@ function getDayArry(year, month, choosedDay) {
         var day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
         dayArry.push({
             dayNum: day,
-            isChoosed: !choosedDay ? curDay == i - firstDay && curMonth == month - 1 && curYear == year : choosedDay == i - firstDay,
+            isChoosed: !hasChoosedDay ? curDay == i - firstDay && curMonth == month - 1 && curYear == year : hasChoosedDay == i - firstDay,
             isSpecailDay: false,
             isCurMonth: isCurMonth,
             color: false
@@ -8658,11 +8673,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       "type": "text",
       "year": _vm.year,
       "month": _vm.month,
-      "day": _vm.choosedDay,
+      "day": _vm.hasChoosedDay,
       "readonly": ""
     },
     domProps: {
-      "value": _vm.message
+      "value": _vm.chooseDate || '请选择时间'
     },
     on: {
       "mouseout": function($event) {
