@@ -1,11 +1,7 @@
 <template>
     <div id="app">
         <div class="datePikcerInputBoX">
-<<<<<<< HEAD
             <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="choosedDay" readonly>
-=======
-            <input type="text" :value="message"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="year" :month="month" :day="hasDay" readonly>
->>>>>>> 1917c394481f3c6ac99fb51d30349c33fb53a94b
             <span @click="clearChoosedTime">清空</span>
         </div>
         <div class="datePicker f_disselected" @mouseover="clearTimeWarpQue" @mouseout="hideDatePicker" v-if="showDatePickerBox">
@@ -35,11 +31,7 @@
                 <p class="datePickerNum">
                     <span
                         class="day"
-<<<<<<< HEAD
                         :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && isChoosed}"
-=======
-                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isToday || item.isChoosed}"
->>>>>>> 1917c394481f3c6ac99fb51d30349c33fb53a94b
                         v-for="(item,index) in days"
                         @click="chooseDay(index)
                     ">{{ item.dayNum }}</span>
