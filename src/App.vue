@@ -177,13 +177,13 @@
             },
             //计算当前日期是否高亮
             highDay: function(){
-                console.log(this.year)
-                console.log(this.month)
-                console.log(this.hasChoosedDay)
-                console.log(curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay)
+                // console.log(this.year)
+                // console.log(this.month)
+                // console.log(this.hasChoosedDay)
+                // console.log(curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay)
                 if(!this.chooseDate) return curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay;
                 const choosedTime = this.chooseDate.split('-');
-                console.log(curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay)
+                // console.log(curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay)
                 if(choosedTime.length != 3) return curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay;
                 return choosedTime[0] == this.year && choosedTime[1] == this.month && choosedTime[2] == this.hasChoosedDay;
             }
