@@ -8416,14 +8416,6 @@ module.exports = Vue$3;
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ exports["default"] = {
     name: 'app',
@@ -8660,7 +8652,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     }
   }, [_h('div', {
     staticClass: "datePikcerInputBoX"
-  }, ["\n<<<<<<< HEAD\n            ", _h('input', {
+  }, [_h('input', {
     staticClass: "chooseTimeInput",
     attrs: {
       "type": "text",
@@ -8678,25 +8670,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
       },
       "click": _vm.showDatePicker
     }
-  }), "\n=======\n            ", _h('input', {
-    staticClass: "chooseTimeInput",
-    attrs: {
-      "type": "text",
-      "year": _vm.year,
-      "month": _vm.month,
-      "day": _vm.hasDay,
-      "readonly": ""
-    },
-    domProps: {
-      "value": _vm.message
-    },
-    on: {
-      "mouseout": function($event) {
-        _vm.hideDatePicker()
-      },
-      "click": _vm.showDatePicker
-    }
-  }), "\n>>>>>>> 1917c394481f3c6ac99fb51d30349c33fb53a94b\n            ", _h('span', {
+  }), " ", _h('span', {
     on: {
       "click": _vm.clearChoosedTime
     }
@@ -8793,7 +8767,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;
     }, [_vm._s(weekday)])
   })]), " ", _h('p', {
     staticClass: "datePickerNum"
-  }, ["\n<<<<<<< HEAD\n                        :class=\"{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && isChoosed}\"\n=======\n                        :class=\"{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isToday || item.isChoosed}\"\n>>>>>>> 1917c394481f3c6ac99fb51d30349c33fb53a94b\n                        v-for=\"(item,index) in days\"\n                        @click=\"chooseDay(index)\n                    \">" + _vm._s(_vm.item.dayNum)])])]) : _vm._e()])
+  }, [_vm._l((_vm.days), function(item, index) {
+    return _h('span', {
+      staticClass: "day",
+      class: {
+        'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && _vm.isChoosed
+      },
+      on: {
+        "click": function($event) {
+          _vm.chooseDay(index)
+        }
+      }
+    }, [_vm._s(item.dayNum)])
+  })])])]) : _vm._e()])
 },staticRenderFns: []}
 
 /***/ },
