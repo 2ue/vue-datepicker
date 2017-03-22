@@ -72,9 +72,10 @@
             }
         },
         computed: {
-            items: function() {
+            items() {
                 const startNum = this.chooseType ? +this.YearChangeSyboml - 4 : 1;
                 const endNum = this.chooseType ? +this.YearChangeSyboml + 4 : 12;
+
                 let tempArry = [];
 
                 for(let i = startNum; i <= endNum; i++){
@@ -89,6 +90,8 @@
             chooseDate: {
                 handler: function(val,oldVal){
                     this.days = getDayArry(this.chooseDate,this.chooseReslt);
+                    
+                    
                 },
                 deep: true
             }
@@ -98,12 +101,12 @@
             showChooseYearBox() {//显示选择年
                 this.YearChangeSyboml = this.chooseDate.year;
                 this.showChooseBox = true;
-                // this.items = [];
+                this.items = [];
                 this.chooseType = true;
             },
             showChooseMonthBox() {//显示选择月
                 this.showChooseBox = true;
-                // this.items = [];
+                this.items = [];
                 this.chooseType = false;
             },
             hideChooseBox(time) {//隐藏选择年月
@@ -119,7 +122,7 @@
             chooseYearMonth(type,value) {//选择年月
                 const chooseType = !!type ? 'year' : 'month';
                 this[chooseType] = value || this[chooseType];
-                this.hideChooseBox(8000000);
+                this.hideChooseBox(1);
                 // this.isChoosed = this.highDay();
             },
             //----------- 选择年月面板 END ---------------
@@ -218,7 +221,7 @@
 
             dayArry.push({
                 dayNum: day,
-                isChoosed: (chooseDateArry[0] == year && chooseDateArry[1] == month && chooseDateArry[2] == (i - firstDay)),
+                isChoosed: (chooseYear == year && chooseMonth == month && chooseDay == (i - firstDay)),
                 isSpecailDay: false,
                 isCurMonth: isCurMonth,
                 color: false
@@ -248,7 +251,7 @@
     @import url('./css/public.css');
     .datePikcerInputBoX{position: relative;width: 360px;}
     .chooseTimeInput{width:360px;height:35px;line-height:35px;border: 1px solid #eee;font-size: 14px;text-indent: 1em;cursor: pointer;}
-    .datePikcerInputBoX span{position: absolute;top: 0;right: 0;display: inline-block;height: 35px;line-height: 35px;padding: 0 10px;border-left: 1px solid #eee;cursor: pointer;}
+    .datePikcerInputBoX span{position: absolute;top: 0;right: 0;display: inline-block;height: 100%;line-height: 35px;padding: 0 10px;border-left: 1px solid #eee;cursor: pointer;}
     .datePicker{margin-top:10px;}
     .pageBox{margin: 100px;}
     .datePicker{width:350px;border: 1px solid #eee;padding: 5px;}

@@ -89,6 +89,8 @@
             chooseDate: {
                 handler: function(val,oldVal){
                     this.days = getDayArry(this.chooseDate,this.chooseReslt);
+                    
+                    
                 },
                 deep: true
             }

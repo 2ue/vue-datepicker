@@ -72,9 +72,10 @@
             }
         },
         computed: {
-            items: function() {
+            items() {
                 const startNum = this.chooseType ? +this.YearChangeSyboml - 4 : 1;
                 const endNum = this.chooseType ? +this.YearChangeSyboml + 4 : 12;
+
                 let tempArry = [];
 
                 for(let i = startNum; i <= endNum; i++){
@@ -89,6 +90,8 @@
             chooseDate: {
                 handler: function(val,oldVal){
                     this.days = getDayArry(this.chooseDate,this.chooseReslt);
+                    
+                    
                 },
                 deep: true
             }
@@ -98,12 +101,12 @@
             showChooseYearBox() {//显示选择年
                 this.YearChangeSyboml = this.chooseDate.year;
                 this.showChooseBox = true;
-                // this.items = [];
+                this.items = [];
                 this.chooseType = true;
             },
             showChooseMonthBox() {//显示选择月
                 this.showChooseBox = true;
-                // this.items = [];
+                this.items = [];
                 this.chooseType = false;
             },
             hideChooseBox(time) {//隐藏选择年月
@@ -136,7 +139,7 @@
             },
             hideDatePicker(time) {
                 const self = this;
-                const t = time || 300;
+                const t = time || 3000000000;
                 self.datePickerBoxTimer = setTimeout(function () {
                     self.showDatePickerBox = false;
                 }, t)

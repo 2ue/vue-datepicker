@@ -72,9 +72,10 @@
             }
         },
         computed: {
-            items: function() {
+            items() {
                 const startNum = this.chooseType ? +this.YearChangeSyboml - 4 : 1;
                 const endNum = this.chooseType ? +this.YearChangeSyboml + 4 : 12;
+                console.log('iii')
                 let tempArry = [];
 
                 for(let i = startNum; i <= endNum; i++){
@@ -89,6 +90,8 @@
             chooseDate: {
                 handler: function(val,oldVal){
                     this.days = getDayArry(this.chooseDate,this.chooseReslt);
+                    
+                    
                 },
                 deep: true
             }

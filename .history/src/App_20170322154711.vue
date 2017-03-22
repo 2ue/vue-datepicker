@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <div class="datePikcerInputBoX">
-            <input type="text" :value="chooseReslt"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="chooseDate.year" :month="chooseDate.month" :day="chooseDate.day" readonly>
+            <input type="text" :value="chooseReslt || '请选择时间'"  class="chooseTimeInput" @mouseout="hideDatePicker()" @click="showDatePicker" :year="chooseDate.year" :month="chooseDate.month" :day="chooseDate.hasChoosedDay" readonly>
             <span @click="clearChoosedTime">清空</span>`
         </div>
         <div class="datePicker f_disselected" @mouseover="clearTimeWarpQue" @mouseout="hideDatePicker" v-if="showDatePickerBox">
@@ -46,22 +46,22 @@
 
     const curDate = new Date();
     const curYear = curDate.getFullYear();
-    const curMonth = curDate.getMonth() + 1;
+    const curMonth = curDate.getMonth();
     const curDay = curDate.getDate();
 
     export default {
         name: 'app',
         data () {
             return {
-                chooseReslt: '请选择时间',
+                chooseReslt: '',
                 chooseDate: {
                     year: curYear,
-                    month: curMonth,
-                    day:curDay
+                    month: curMonth + 1,
+                    hasChoosedDay:curDay,
                 },
                 // isChoosed: true,
                 items: [], //选择年月存放数据
-                days:getDayArry({year: curYear,month: curMonth,day:curDay}),
+                days:getDayArry({year: curYear,month: curMonth + 1,hasChoosedDay:curDay}),
                 showChooseBox: false, //选择年月容器状态
                 showDatePickerBox: false, //日历容器
                 chooseBoxTimer: '', //定时器
@@ -72,9 +72,13 @@
             }
         },
         computed: {
-            items: function() {
+            days() {//生成当前月的日期数据
+                return getDayArry(this.chooseDate);
+            },
+            items() {
                 const startNum = this.chooseType ? +this.YearChangeSyboml - 4 : 1;
                 const endNum = this.chooseType ? +this.YearChangeSyboml + 4 : 12;
+
                 let tempArry = [];
 
                 for(let i = startNum; i <= endNum; i++){
@@ -88,7 +92,8 @@
         watch: {
             chooseDate: {
                 handler: function(val,oldVal){
-                    this.days = getDayArry(this.chooseDate,this.chooseReslt);
+                    this.days = getDayArry(this.chooseDate);
+                    console.log(this.days);
                 },
                 deep: true
             }
@@ -98,12 +103,12 @@
             showChooseYearBox() {//显示选择年
                 this.YearChangeSyboml = this.chooseDate.year;
                 this.showChooseBox = true;
-                // this.items = [];
+                this.items = [];
                 this.chooseType = true;
             },
             showChooseMonthBox() {//显示选择月
                 this.showChooseBox = true;
-                // this.items = [];
+                this.items = [];
                 this.chooseType = false;
             },
             hideChooseBox(time) {//隐藏选择年月
@@ -119,7 +124,7 @@
             chooseYearMonth(type,value) {//选择年月
                 const chooseType = !!type ? 'year' : 'month';
                 this[chooseType] = value || this[chooseType];
-                this.hideChooseBox(8000000);
+                this.hideChooseBox(1);
                 // this.isChoosed = this.highDay();
             },
             //----------- 选择年月面板 END ---------------
@@ -127,11 +132,11 @@
             //----------- 时间选择面板 START ---------------
             showDatePicker(event) {//显示选择日期
                 const value = event.target.value;
-                const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [curYear, curMonth, curDay];
+                const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [curYear, curMonth + 1, curDay];
                 this.showDatePickerBox = true;
                 this.chooseDate.year = choosedDayArry[0];
                 this.chooseDate.month = choosedDayArry[1];
-                this.chooseDate.day = choosedDayArry[2];
+                this.chooseDate.hasChoosedDay = choosedDayArry[2];
                 // this.isChoosed = this.highDay();
             },
             hideDatePicker(time) {
@@ -172,33 +177,37 @@
                 if(!!!index && index != 0) return;
                 if(!this.days[index].isCurMonth) return;
                 this.days[index].color = !this.days[index].color;
-                this.chooseDate.day = this.days[index].dayNum;
+                this.chooseReslt = this.chooseDate.year + '-' + this.chooseDate.month + '-' + this.days[index].dayNum;
+                this.chooseDate.hasChoosedDay = this.days[index].dayNum;
                 this.showDatePickerBox = false;
-                if(!this.chooseDate.year || !this.chooseDate.month || !this.chooseDate.day){
-                    this.chooseReslt = '请选择时间';
-                }else{
-                    this.chooseReslt = this.chooseDate.year + '-' + this.chooseDate.month + '-' + this.chooseDate.day;
-                }
             },
             //清空选择
             clearChoosedTime(){
-                this.chooseDate.year = '';
-                this.chooseDate.month = '';
-                this.chooseDate.day = '';
+                this.chooseReslt = '请选择时间';
+                this.chooseDate.year = curYear;
+                this.chooseDate.month = curMonth + 1;
+                this.chooseDate.hasChoosedDay = '';
             },
             //计算当前日期是否高亮
-            highDay(){
-                
-            }
+            // highDay(){
+            //     // console.log(this.chooseDate.year)
+            //     // console.log(this.chooseDate.month)
+            //     // console.log(this.chooseDate.hasChoosedDay)
+            //     // console.log(curYear == this.chooseDate.year && curMonth == this.chooseDate.month - 1 && curDay == this.chooseDate.hasChoosedDay)
+            //     if(!this.chooseReslt) return curYear == this.chooseDate.year && curMonth == this.chooseDate.month - 1 && curDay == this.chooseDate.hasChoosedDay;
+            //     const choosedTime = this.chooseReslt.split('-');
+            //     // console.log(curYear == this.chooseDate.year && curMonth == this.chooseDate.month - 1 && curDay == this.chooseDate.hasChoosedDay)
+            //     if(choosedTime.length != 3) return curYear == this.chooseDate.year && curMonth == this.chooseDate.month - 1 && curDay == this.chooseDate.hasChoosedDay;
+            //     return choosedTime[0] == this.chooseDate.year && choosedTime[1] == this.chooseDate.month && choosedTime[2] == this.chooseDate.hasChoosedDay;
+            // }
         }
     };
     //-------------------------月份数组拼接 START------------------------------------
-    function getDayArry(showDate, chooseReslt) {
+    function getDayArry(chooseDate) {
         
-        const year = showDate.year;
-        const month = showDate.month;
-        const day = showDate.day;
-        const chooseDateArry = !!chooseReslt && chooseReslt.indexOf('-') ? chooseReslt.split('-') : [curYear,curMonth,curDay];
+        const year = chooseDate.year;
+        const month = chooseDate.month;
+        const hasChoosedDay = chooseDate.hasChoosedDay;
 
         //获取当前月天数数组
         const curMonthDays = getMonthDays(month);
@@ -218,12 +227,13 @@
 
             dayArry.push({
                 dayNum: day,
-                isChoosed: (chooseDateArry[0] == year && chooseDateArry[1] == month && chooseDateArry[2] == (i - firstDay)),
+                isChoosed: !!hasChoosedDay ? (hasChoosedDay == (i - firstDay)) : false,
                 isSpecailDay: false,
                 isCurMonth: isCurMonth,
                 color: false
             })
         };
+        console.log(dayArry)
         return dayArry;
 
     };
@@ -241,6 +251,18 @@
         const tempDate = new Date(year, month, day).getDay();
         return tempDate;
     };
+    var arrys = [1,2,3,4,5];
+    var objs = {
+        i:1,
+        j:6
+    };
+    arrys.forEach(function(index,val){
+        console.log(index+ ': ' + val);
+    })
+    objs.forEach(function(key,val){
+
+        console.log(key+ ': ' + val);
+    })
     //-------------------------月份数组拼接 END------------------------------------
 </script>
 
@@ -248,7 +270,7 @@
     @import url('./css/public.css');
     .datePikcerInputBoX{position: relative;width: 360px;}
     .chooseTimeInput{width:360px;height:35px;line-height:35px;border: 1px solid #eee;font-size: 14px;text-indent: 1em;cursor: pointer;}
-    .datePikcerInputBoX span{position: absolute;top: 0;right: 0;display: inline-block;height: 35px;line-height: 35px;padding: 0 10px;border-left: 1px solid #eee;cursor: pointer;}
+    .datePikcerInputBoX span{position: absolute;top: 0;right: 0;display: inline-block;height: 100%;line-height: 35px;padding: 0 10px;border-left: 1px solid #eee;cursor: pointer;}
     .datePicker{margin-top:10px;}
     .pageBox{margin: 100px;}
     .datePicker{width:350px;border: 1px solid #eee;padding: 5px;}
