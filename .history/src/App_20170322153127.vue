@@ -31,7 +31,7 @@
                 <p class="datePickerNum">
                     <span
                         class="day"
-                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && item.isCurMonth}"
+                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed}"
                         :title="item.isChoosed"
                         v-for="(item,index) in days"
                         @click="chooseDay(index)
@@ -77,7 +77,7 @@
             },
             items() {
                 const startNum = this.chooseType ? +this.YearChangeSyboml - 4 : 1;
-                const endNum = this.chooseType ? +this.YearChangeSyboml + 4 : 12;
+                const endNum = this.chooseType ? +thisself.YearChangeSyboml + 4 : 12;
 
                 let tempArry = [];
 
@@ -227,7 +227,7 @@
 
             dayArry.push({
                 dayNum: day,
-                isChoosed: !!hasChoosedDay ? (hasChoosedDay == (i - firstDay)) : false,
+                isChoosed: !!hasChoosedDay ? hasChoosedDay == (i - firstDay) : false,
                 isSpecailDay: false,
                 isCurMonth: isCurMonth,
                 color: false

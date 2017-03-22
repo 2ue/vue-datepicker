@@ -227,7 +227,7 @@
 
             dayArry.push({
                 dayNum: day,
-                isChoosed: !!hasChoosedDay ? (hasChoosedDay == (i - firstDay)) : false,
+                isChoosed: !!hasChoosedDay ? (hasChoosedDay == (i - firstDay) && ) : false,
                 isSpecailDay: false,
                 isCurMonth: isCurMonth,
                 color: false

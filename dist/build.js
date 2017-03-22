@@ -9435,6 +9435,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 const curDate = new Date();
@@ -9446,13 +9447,15 @@ const curDay = curDate.getDate();
     name: 'app',
     data() {
         return {
-            chooseDate: '',
-            year: curYear,
-            month: curMonth + 1,
-            hasChoosedDay: curDay,
-            isChoosed: true,
+            chooseReslt: '',
+            chooseDate: {
+                year: curYear,
+                month: curMonth + 1,
+                hasChoosedDay: curDay
+            },
+            // isChoosed: true,
             items: [], //选择年月存放数据
-            days: getDayArry(curYear, curMonth + 1),
+            days: getDayArry({ year: curYear, month: curMonth + 1, hasChoosedDay: curDay }),
             showChooseBox: false, //选择年月容器状态
             showDatePickerBox: false, //日历容器
             chooseBoxTimer: '', //定时器
@@ -9465,29 +9468,36 @@ const curDay = curDate.getDate();
     computed: {
         days() {
             //生成当前月的日期数据
-            const self = this;
-            return getDayArry(self.year, self.month, this.hasChoosedDay);
+            return getDayArry(this.chooseDate);
         },
         items() {
-            const self = this;
-            const startNum = self.chooseType ? +self.YearChangeSyboml - 4 : 1;
-            const endNum = self.chooseType ? +self.YearChangeSyboml + 4 : 12;
+            const startNum = this.chooseType ? +this.YearChangeSyboml - 4 : 1;
+            const endNum = this.chooseType ? +this.YearChangeSyboml + 4 : 12;
 
             let tempArry = [];
 
             for (let i = startNum; i <= endNum; i++) {
                 tempArry.push(i);
             };
-            self.items = [];
+            this.items = [];
 
             return tempArry;
+        }
+    },
+    watch: {
+        chooseDate: {
+            handler: function (val, oldVal) {
+                this.days = getDayArry(this.chooseDate);
+                console.log(this.days);
+            },
+            deep: true
         }
     },
     methods: {
         //----------- 选择年月面板 START ---------------
         showChooseYearBox() {
             //显示选择年
-            this.YearChangeSyboml = this.year;
+            this.YearChangeSyboml = this.chooseDate.year;
             this.showChooseBox = true;
             this.items = [];
             this.chooseType = true;
@@ -9515,7 +9525,7 @@ const curDay = curDate.getDate();
             const chooseType = !!type ? 'year' : 'month';
             this[chooseType] = value || this[chooseType];
             this.hideChooseBox(1);
-            this.isChoosed = this.highDay();
+            // this.isChoosed = this.highDay();
         },
         //----------- 选择年月面板 END ---------------
         //
@@ -9525,10 +9535,10 @@ const curDay = curDate.getDate();
             const value = event.target.value;
             const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [curYear, curMonth + 1, curDay];
             this.showDatePickerBox = true;
-            this.year = choosedDayArry[0];
-            this.month = choosedDayArry[1];
-            this.hasChoosedDay = choosedDayArry[2];
-            this.isChoosed = this.highDay();
+            this.chooseDate.year = choosedDayArry[0];
+            this.chooseDate.month = choosedDayArry[1];
+            this.chooseDate.hasChoosedDay = choosedDayArry[2];
+            // this.isChoosed = this.highDay();
         },
         hideDatePicker(time) {
             const self = this;
@@ -9545,61 +9555,54 @@ const curDay = curDate.getDate();
         //----------- 切换月 START ---------------
         preMonth() {
             //上一月
-            const isFirstMonth = this.month == 1;
-            this.month = isFirstMonth ? 12 : this.month - 1;
-            this.year = isFirstMonth ? this.year - 1 : this.year;
-            this.isChoosed = this.highDay();
+            const isFirstMonth = this.chooseDate.month == 1;
+            this.chooseDate.month = isFirstMonth ? 12 : this.chooseDate.month - 1;
+            this.chooseDate.year = isFirstMonth ? this.chooseDate.year - 1 : this.chooseDate.year;
+            // this.isChoosed = this.highDay();
         },
         nxtMonth() {
             //下一月
-            const isLastMonth = this.month == 12;
-            this.month = isLastMonth ? 1 : +this.month + 1;
-            this.year = isLastMonth ? +this.year + 1 : this.year;
-            this.isChoosed = this.highDay();
+            const isLastMonth = this.chooseDate.month == 12;
+            this.chooseDate.month = isLastMonth ? 1 : +this.chooseDate.month + 1;
+            this.chooseDate.year = isLastMonth ? +this.chooseDate.year + 1 : this.chooseDate.year;
+            // this.isChoosed = this.highDay();
         },
         //----------- 切换月 END ---------------
         changeYearPagePre() {
             //年翻页：上一页
             this.YearChangeSyboml = this.YearChangeSyboml - 12;
-            this.isChoosed = this.highDay();
+            // this.isChoosed = this.highDay();
         },
         changeYearPageNxt() {
             //年翻页：下一页
             this.YearChangeSyboml = +this.YearChangeSyboml + 12;
-            this.isChoosed = this.highDay();
+            // this.isChoosed = this.highDay();
         },
         chooseDay(index) {
             //选择天
             if (!!!index && index != 0) return;
             if (!this.days[index].isCurMonth) return;
             this.days[index].color = !this.days[index].color;
-            this.chooseDate = this.year + '-' + this.month + '-' + this.days[index].dayNum;
-            this.hasChoosedDay = this.days[index].dayNum;
+            this.chooseReslt = this.chooseDate.year + '-' + this.chooseDate.month + '-' + this.days[index].dayNum;
+            this.chooseDate.hasChoosedDay = this.days[index].dayNum;
             this.showDatePickerBox = false;
         },
         //清空选择
         clearChoosedTime() {
-            this.chooseDate = '请选择时间';
-            this.year = curYear;
-            this.month = curMonth + 1;
-            this.hasChoosedDay = '';
-        },
-        //计算当前日期是否高亮
-        highDay() {
-            // console.log(this.year)
-            // console.log(this.month)
-            // console.log(this.hasChoosedDay)
-            // console.log(curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay)
-            if (!this.chooseDate) return curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay;
-            const choosedTime = this.chooseDate.split('-');
-            // console.log(curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay)
-            if (choosedTime.length != 3) return curYear == this.year && curMonth == this.month - 1 && curDay == this.hasChoosedDay;
-            return choosedTime[0] == this.year && choosedTime[1] == this.month && choosedTime[2] == this.hasChoosedDay;
+            this.chooseReslt = '请选择时间';
+            this.chooseDate.year = curYear;
+            this.chooseDate.month = curMonth + 1;
+            this.chooseDate.hasChoosedDay = '';
         }
     }
 });
 //-------------------------月份数组拼接 START------------------------------------
-function getDayArry(year, month, hasChoosedDay) {
+function getDayArry(chooseDate) {
+
+    const year = chooseDate.year;
+    const month = chooseDate.month;
+    const hasChoosedDay = chooseDate.hasChoosedDay;
+
     //获取当前月天数数组
     const curMonthDays = getMonthDays(month);
     const preMonthDays = getMonthDays(month == 0 ? 11 : month - 1);
@@ -9618,13 +9621,13 @@ function getDayArry(year, month, hasChoosedDay) {
 
         dayArry.push({
             dayNum: day,
-            isChoosed: !hasChoosedDay ? curDay == i - firstDay && curMonth == month - 1 && curYear == year : hasChoosedDay == i - firstDay,
+            isChoosed: !!hasChoosedDay ? hasChoosedDay == i - firstDay : false,
             isSpecailDay: false,
             isCurMonth: isCurMonth,
             color: false
         });
     };
-
+    console.log(dayArry);
     return dayArry;
 };
 
@@ -9757,13 +9760,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "chooseTimeInput",
     attrs: {
       "type": "text",
-      "year": _vm.year,
-      "month": _vm.month,
-      "day": _vm.hasChoosedDay,
+      "year": _vm.chooseDate.year,
+      "month": _vm.chooseDate.month,
+      "day": _vm.chooseDate.hasChoosedDay,
       "readonly": ""
     },
     domProps: {
-      "value": _vm.chooseDate || '请选择时间'
+      "value": _vm.chooseReslt || '请选择时间'
     },
     on: {
       "mouseout": function($event) {
@@ -9775,7 +9778,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.clearChoosedTime
     }
-  }, [_vm._v("清空")])]), _vm._v(" "), (_vm.showDatePickerBox) ? _c('div', {
+  }, [_vm._v("清空")]), _vm._v("`\n    ")]), _vm._v(" "), (_vm.showDatePickerBox) ? _c('div', {
     staticClass: "datePicker f_disselected",
     on: {
       "mouseover": _vm.clearTimeWarpQue,
@@ -9805,14 +9808,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.showChooseYearBox()
       }
     }
-  }, [_vm._v(_vm._s(_vm.year))]), _vm._v(" "), _c('span', {
+  }, [_vm._v(_vm._s(_vm.chooseDate.year))]), _vm._v(" "), _c('span', {
     staticClass: "chooseYearMonth",
     on: {
       "click": function($event) {
         _vm.showChooseMonthBox()
       }
     }
-  }, [_vm._v(_vm._s(_vm.month))]), _vm._v(" "), _c('span', {
+  }, [_vm._v(_vm._s(_vm.chooseDate.month))]), _vm._v(" "), _c('span', {
     staticClass: "changeMomth",
     on: {
       "click": function($event) {
@@ -9872,7 +9875,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('span', {
       staticClass: "day",
       class: {
-        'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && _vm.isChoosed
+        'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && item.isCurMonth
+      },
+      attrs: {
+        "title": item.isChoosed
       },
       on: {
         "click": function($event) {

@@ -31,7 +31,7 @@
                 <p class="datePickerNum">
                     <span
                         class="day"
-                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && item.isCurMonth}"
+                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed}"
                         :title="item.isChoosed"
                         v-for="(item,index) in days"
                         @click="chooseDay(index)
@@ -61,7 +61,11 @@
                 },
                 // isChoosed: true,
                 items: [], //选择年月存放数据
-                days:getDayArry({year: curYear,month: curMonth + 1,hasChoosedDay:curDay}),
+                days:getDayArry({
+                    year: curYear,
+                    month: curMonth + 1,
+                    hasChoosedDay:curDay,
+                }),
                 showChooseBox: false, //选择年月容器状态
                 showDatePickerBox: false, //日历容器
                 chooseBoxTimer: '', //定时器
@@ -73,30 +77,27 @@
         },
         computed: {
             days() {//生成当前月的日期数据
-                return getDayArry(this.chooseDate);
+                const self = this;
+                const tt = getDayArry(self.chooseDate);
+                return tt;
             },
             items() {
-                const startNum = this.chooseType ? +this.YearChangeSyboml - 4 : 1;
-                const endNum = this.chooseType ? +this.YearChangeSyboml + 4 : 12;
+                const self = this;
+                const startNum = self.chooseType ? +self.YearChangeSyboml - 4 : 1;
+                const endNum = self.chooseType ? +self.YearChangeSyboml + 4 : 12;
 
                 let tempArry = [];
 
                 for(let i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
-                this.items = [];
+                self.items = [];
 
                 return tempArry;
             }
         },
         watch: {
-            chooseDate: {
-                handler: function(val,oldVal){
-                    this.days = getDayArry(this.chooseDate);
-                    console.log(this.days);
-                },
-                deep: true
-            }
+            
         },
         methods: {
             //----------- 选择年月面板 START ---------------
@@ -227,7 +228,7 @@
 
             dayArry.push({
                 dayNum: day,
-                isChoosed: !!hasChoosedDay ? (hasChoosedDay == (i - firstDay)) : false,
+                isChoosed: !!hasChoosedDay ? hasChoosedDay == (i - firstDay) : false,
                 isSpecailDay: false,
                 isCurMonth: isCurMonth,
                 color: false

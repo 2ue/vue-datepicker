@@ -31,7 +31,7 @@
                 <p class="datePickerNum">
                     <span
                         class="day"
-                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed && item.isCurMonth}"
+                        :class="{ 'u_cf30': item.color, 'hasHover': item.isCurMonth, 'isToday': item.isChoosed}"
                         :title="item.isChoosed"
                         v-for="(item,index) in days"
                         @click="chooseDay(index)
@@ -73,18 +73,20 @@
         },
         computed: {
             days() {//生成当前月的日期数据
-                return getDayArry(this.chooseDate);
+                const self = this;
+                return getDayArry(self.chooseDate);
             },
             items() {
-                const startNum = this.chooseType ? +this.YearChangeSyboml - 4 : 1;
-                const endNum = this.chooseType ? +this.YearChangeSyboml + 4 : 12;
+                const self = this;
+                const startNum = self.chooseType ? +self.YearChangeSyboml - 4 : 1;
+                const endNum = self.chooseType ? +self.YearChangeSyboml + 4 : 12;
 
                 let tempArry = [];
 
                 for(let i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
-                this.items = [];
+                self.items = [];
 
                 return tempArry;
             }
@@ -92,7 +94,7 @@
         watch: {
             chooseDate: {
                 handler: function(val,oldVal){
-                    this.days = getDayArry(this.chooseDate);
+                    // this.days = getDayArry(self.chooseDate);
                     console.log(this.days);
                 },
                 deep: true
@@ -227,7 +229,7 @@
 
             dayArry.push({
                 dayNum: day,
-                isChoosed: !!hasChoosedDay ? (hasChoosedDay == (i - firstDay)) : false,
+                isChoosed: !!hasChoosedDay ? hasChoosedDay == (i - firstDay) : false,
                 isSpecailDay: false,
                 isCurMonth: isCurMonth,
                 color: false
