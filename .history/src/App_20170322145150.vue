@@ -221,15 +221,27 @@
 
         return dayArry;
 
+        // $('body').on('blur', '.input', function(event) {
+        //     const _self = $(this);
+        //     const _val = _self.val();
+        //     if(!_val || !isNaN(_val) || _val.indexOf('.') > 0){//判断是否为空，是否为数字，是否为小数
+        //         //do something
+        //         //
+        //     }else if(_val > 9999){
+        //         //do something
+        //         //
+        //     }else if(_val < 1){
+        //         //do something
+        //         //
+        //     }
+        // });
     };
-
     function getMonthDays(month) {
         //获取某年某月有多少天
         if(!!!month) return;
         const tempDate = new Date(2016, month, 0).getDate();
         return tempDate;
     };
-    
     function getDayInWeek(year, month, day) {
         //返回某年某月某日是星期几
         if(!!!year || !!!month || !!!day || month - 1 < 0) return 0;

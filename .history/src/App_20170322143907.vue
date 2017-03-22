@@ -43,10 +43,10 @@
 
 <script>
 
-    const curDate = new Date();
-    const curYear = curDate.getFullYear();
-    const curMonth = curDate.getMonth();
-    const curDay = curDate.getDate();
+    var curDate = new Date();
+    var curYear = curDate.getFullYear();
+    var curMonth = curDate.getMonth();
+    var curDay = curDate.getDate();
 
     export default {
         name: 'app',
@@ -69,49 +69,46 @@
             }
         },
         computed: {
-            days() {//生成当前月的日期数据
+            days(){//生成当前月的日期数据
                 const self = this;
                 return getDayArry(self.year, self.month, this.hasChoosedDay);
             },
-            items() {
+            items: function () {
                 const self = this;
+                const tempArry = [];
                 const startNum = self.chooseType ? +self.YearChangeSyboml - 4 : 1;
                 const endNum = self.chooseType ? +self.YearChangeSyboml + 4 : 12;
-
-                let tempArry = [];
-
-                for(let i = startNum; i <= endNum; i++){
+                for(var i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
                 self.items = [];
-
                 return tempArry;
             }
         },
         methods: {
             //----------- 选择年月面板 START ---------------
-            showChooseYearBox() {//显示选择年
+            showChooseYearBox: function () {//显示选择年
                 this.YearChangeSyboml = this.year;
                 this.showChooseBox = true;
                 this.items = [];
                 this.chooseType = true;
             },
-            showChooseMonthBox() {//显示选择月
+            showChooseMonthBox: function () {//显示选择月
                 this.showChooseBox = true;
                 this.items = [];
                 this.chooseType = false;
             },
-            hideChooseBox(time) {//隐藏选择年月
+            hideChooseBox: function (time) {//隐藏选择年月
                 const self = this;
                 const t = time || 300;
                 self.chooseBoxTimer = setTimeout(function () {
                     self.showChooseBox = false;
                 }, t);
             },
-            clearTimeQue() {//清除队列
+            clearTimeQue: function () {//清除队列
                 clearTimeout(this.chooseBoxTimer);
             },
-            chooseYearMonth(type,value) {//选择年月
+            chooseYearMonth: function (type,value) {//选择年月
                 const chooseType = !!type ? 'year' : 'month';
                 this[chooseType] = value || this[chooseType];
                 this.hideChooseBox(1);
@@ -120,7 +117,7 @@
             //----------- 选择年月面板 END ---------------
             //
             //----------- 时间选择面板 START ---------------
-            showDatePicker(event) {//显示选择日期
+            showDatePicker: function (event) {//显示选择日期
                 const value = event.target.value;
                 const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [curYear, curMonth + 1, curDay];
                 this.showDatePickerBox = true;
@@ -129,41 +126,41 @@
                 this.hasChoosedDay = choosedDayArry[2];
                 this.isChoosed = this.highDay();
             },
-            hideDatePicker(time) {
+            hideDatePicker: function (time) {
                 const self = this;
                 const t = time || 300;
                 self.datePickerBoxTimer = setTimeout(function () {
                     self.showDatePickerBox = false;
                 }, t)
             },
-            clearTimeWarpQue() {
+            clearTimeWarpQue: function () {
                 clearTimeout(this.datePickerBoxTimer);
             },
             //----------- 时间选择面板 END ---------------
             //
             //----------- 切换月 START ---------------
-            preMonth() {//上一月
+            preMonth: function () {//上一月
                 const isFirstMonth = this.month == 1;
                 this.month = isFirstMonth ? 12 : this.month - 1;
                 this.year = isFirstMonth ? this.year - 1 : this.year;
                 this.isChoosed = this.highDay();
             },
-            nxtMonth() {//下一月
+            nxtMonth: function () {//下一月
                 const isLastMonth = this.month == 12;
                 this.month = isLastMonth ? 1 : +this.month + 1;
                 this.year = isLastMonth ? +this.year + 1 : this.year;
                 this.isChoosed = this.highDay();
             },
             //----------- 切换月 END ---------------
-            changeYearPagePre() {//年翻页：上一页
+            changeYearPagePre: function () {//年翻页：上一页
                 this.YearChangeSyboml = this.YearChangeSyboml - 12;
                 this.isChoosed = this.highDay();
             },
-            changeYearPageNxt() {//年翻页：下一页
+            changeYearPageNxt: function () {//年翻页：下一页
                 this.YearChangeSyboml = +this.YearChangeSyboml + 12;
                 this.isChoosed = this.highDay();
             },
-            chooseDay(index) {//选择天
+            chooseDay: function (index) {//选择天
                 if(!!!index && index != 0) return;
                 if(!this.days[index].isCurMonth) return;
                 this.days[index].color = !this.days[index].color;
@@ -172,14 +169,14 @@
                 this.showDatePickerBox = false;
             },
             //清空选择
-            clearChoosedTime(){
+            clearChoosedTime: function(){
                 this.chooseDate = '请选择时间';
                 this.year = curYear;
                 this.month = curMonth + 1;
                 this.hasChoosedDay = '';
             },
             //计算当前日期是否高亮
-            highDay(){
+            highDay: function(){
                 // console.log(this.year)
                 // console.log(this.month)
                 // console.log(this.hasChoosedDay)
@@ -195,21 +192,17 @@
     //-------------------------月份数组拼接 START------------------------------------
     function getDayArry(year, month, hasChoosedDay) {
         //获取当前月天数数组
-        const curMonthDays = getMonthDays(month);
-        const preMonthDays = getMonthDays(month == 0 ? 11 : month - 1);
-        // const nxtMonthDays = getMonthDays(month == 11 ? 0 : month + 1);
-        const firstDay = getDayInWeek(year, (month - 1), 1); //当前月第一天是星期几
-        const allDays =  Math.ceil((+curMonthDays + firstDay) / 7) * 7;
-        
-        let dayArry = [];
-
-        for(let i = 1; i <= allDays; i++){
-
-            const isPre = i <= firstDay;
-            const isNxt = i > (firstDay + curMonthDays);
-            const isCurMonth = !isPre && !isNxt;
-            const day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
-
+        var curMonthDays = getMonthDays(month);
+        var preMonthDays = getMonthDays(month == 0 ? 11 : month - 1);
+        // var nxtMonthDays = getMonthDays(month == 11 ? 0 : month + 1);
+        var firstDay = getDayInWeek(year, (month - 1), 1); //当前月第一天是星期几
+        var allDays =  Math.ceil((+curMonthDays + firstDay) / 7) * 7;
+        var dayArry = [];
+        for(var i = 1; i <= allDays; i++){
+            var isPre = i <= firstDay;
+            var isNxt = i > (firstDay + curMonthDays);
+            var isCurMonth = !isPre && !isNxt;
+            var day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
             dayArry.push({
                 dayNum: day,
                 isChoosed: !hasChoosedDay ? (curDay == (i - firstDay) && curMonth == (month - 1) && curYear == year) : hasChoosedDay == (i - firstDay),
@@ -218,22 +211,32 @@
                 color: false
             })
         };
-
         return dayArry;
-
+        $('body').on('blur', '.input', function(event) {
+            var _self = $(this);
+            var _val = _self.val();
+            if(!_val || !isNaN(_val) || _val.indexOf('.') > 0){//判断是否为空，是否为数字，是否为小数
+                //do something
+                //
+            }else if(_val > 9999){
+                //do something
+                //
+            }else if(_val < 1){
+                //do something
+                //
+            }
+        });
     };
-
     function getMonthDays(month) {
         //获取某年某月有多少天
         if(!!!month) return;
-        const tempDate = new Date(2016, month, 0).getDate();
+        var tempDate = new Date(2016, month, 0).getDate();
         return tempDate;
     };
-    
     function getDayInWeek(year, month, day) {
         //返回某年某月某日是星期几
         if(!!!year || !!!month || !!!day || month - 1 < 0) return 0;
-        const tempDate = new Date(year, month, day).getDay();
+        var tempDate = new Date(year, month, day).getDay();
         return tempDate;
     };
     //-------------------------月份数组拼接 END------------------------------------

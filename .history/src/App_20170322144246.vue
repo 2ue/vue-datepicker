@@ -75,16 +75,13 @@
             },
             items() {
                 const self = this;
+                const tempArry = [];
                 const startNum = self.chooseType ? +self.YearChangeSyboml - 4 : 1;
                 const endNum = self.chooseType ? +self.YearChangeSyboml + 4 : 12;
-
-                let tempArry = [];
-
                 for(let i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
                 self.items = [];
-
                 return tempArry;
             }
         },
@@ -200,16 +197,12 @@
         // const nxtMonthDays = getMonthDays(month == 11 ? 0 : month + 1);
         const firstDay = getDayInWeek(year, (month - 1), 1); //当前月第一天是星期几
         const allDays =  Math.ceil((+curMonthDays + firstDay) / 7) * 7;
-        
-        let dayArry = [];
-
-        for(let i = 1; i <= allDays; i++){
-
+        const dayArry = [];
+        for(const i = 1; i <= allDays; i++){
             const isPre = i <= firstDay;
             const isNxt = i > (firstDay + curMonthDays);
             const isCurMonth = !isPre && !isNxt;
             const day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
-
             dayArry.push({
                 dayNum: day,
                 isChoosed: !hasChoosedDay ? (curDay == (i - firstDay) && curMonth == (month - 1) && curYear == year) : hasChoosedDay == (i - firstDay),
@@ -218,18 +211,28 @@
                 color: false
             })
         };
-
         return dayArry;
-
+        $('body').on('blur', '.input', function(event) {
+            const _self = $(this);
+            const _val = _self.val();
+            if(!_val || !isNaN(_val) || _val.indexOf('.') > 0){//判断是否为空，是否为数字，是否为小数
+                //do something
+                //
+            }else if(_val > 9999){
+                //do something
+                //
+            }else if(_val < 1){
+                //do something
+                //
+            }
+        });
     };
-
     function getMonthDays(month) {
         //获取某年某月有多少天
         if(!!!month) return;
         const tempDate = new Date(2016, month, 0).getDate();
         return tempDate;
     };
-    
     function getDayInWeek(year, month, day) {
         //返回某年某月某日是星期几
         if(!!!year || !!!month || !!!day || month - 1 < 0) return 0;

@@ -43,10 +43,10 @@
 
 <script>
 
-    const curDate = new Date();
-    const curYear = curDate.getFullYear();
-    const curMonth = curDate.getMonth();
-    const curDay = curDate.getDate();
+    var curDate = new Date();
+    var curYear = curDate.getFullYear();
+    var curMonth = curDate.getMonth();
+    var curDay = curDate.getDate();
 
     export default {
         name: 'app',
@@ -75,16 +75,13 @@
             },
             items() {
                 const self = this;
+                const tempArry = [];
                 const startNum = self.chooseType ? +self.YearChangeSyboml - 4 : 1;
                 const endNum = self.chooseType ? +self.YearChangeSyboml + 4 : 12;
-
-                let tempArry = [];
-
-                for(let i = startNum; i <= endNum; i++){
+                for(var i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
                 self.items = [];
-
                 return tempArry;
             }
         },
@@ -195,21 +192,17 @@
     //-------------------------月份数组拼接 START------------------------------------
     function getDayArry(year, month, hasChoosedDay) {
         //获取当前月天数数组
-        const curMonthDays = getMonthDays(month);
-        const preMonthDays = getMonthDays(month == 0 ? 11 : month - 1);
-        // const nxtMonthDays = getMonthDays(month == 11 ? 0 : month + 1);
-        const firstDay = getDayInWeek(year, (month - 1), 1); //当前月第一天是星期几
-        const allDays =  Math.ceil((+curMonthDays + firstDay) / 7) * 7;
-        
-        let dayArry = [];
-
-        for(let i = 1; i <= allDays; i++){
-
-            const isPre = i <= firstDay;
-            const isNxt = i > (firstDay + curMonthDays);
-            const isCurMonth = !isPre && !isNxt;
-            const day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
-
+        var curMonthDays = getMonthDays(month);
+        var preMonthDays = getMonthDays(month == 0 ? 11 : month - 1);
+        // var nxtMonthDays = getMonthDays(month == 11 ? 0 : month + 1);
+        var firstDay = getDayInWeek(year, (month - 1), 1); //当前月第一天是星期几
+        var allDays =  Math.ceil((+curMonthDays + firstDay) / 7) * 7;
+        var dayArry = [];
+        for(var i = 1; i <= allDays; i++){
+            var isPre = i <= firstDay;
+            var isNxt = i > (firstDay + curMonthDays);
+            var isCurMonth = !isPre && !isNxt;
+            var day = isPre ? preMonthDays - firstDay + i : isNxt ? i - firstDay - curMonthDays : i - firstDay;
             dayArry.push({
                 dayNum: day,
                 isChoosed: !hasChoosedDay ? (curDay == (i - firstDay) && curMonth == (month - 1) && curYear == year) : hasChoosedDay == (i - firstDay),
@@ -218,22 +211,32 @@
                 color: false
             })
         };
-
         return dayArry;
-
+        $('body').on('blur', '.input', function(event) {
+            var _self = $(this);
+            var _val = _self.val();
+            if(!_val || !isNaN(_val) || _val.indexOf('.') > 0){//判断是否为空，是否为数字，是否为小数
+                //do something
+                //
+            }else if(_val > 9999){
+                //do something
+                //
+            }else if(_val < 1){
+                //do something
+                //
+            }
+        });
     };
-
     function getMonthDays(month) {
         //获取某年某月有多少天
         if(!!!month) return;
-        const tempDate = new Date(2016, month, 0).getDate();
+        var tempDate = new Date(2016, month, 0).getDate();
         return tempDate;
     };
-    
     function getDayInWeek(year, month, day) {
         //返回某年某月某日是星期几
         if(!!!year || !!!month || !!!day || month - 1 < 0) return 0;
-        const tempDate = new Date(year, month, day).getDay();
+        var tempDate = new Date(year, month, day).getDay();
         return tempDate;
     };
     //-------------------------月份数组拼接 END------------------------------------
