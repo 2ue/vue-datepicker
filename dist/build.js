@@ -9552,7 +9552,7 @@ const curDay = curDate.getDate();
             this.chooseDate = {
                 year: choosedDayArry[0],
                 month: choosedDayArry[1],
-                month: choosedDayArry[2]
+                day: choosedDayArry[2]
             };
         },
         hideDatePicker: function (time) {
@@ -9597,6 +9597,7 @@ const curDay = curDate.getDate();
             if (!this.days[index].isCurMonth) return;
             this.days[index].color = !this.days[index].color;
             this.chooseDate.day = this.days[index].dayNum;
+            console.log(this.chooseDate);
             this.showDatePickerBox = false;
             if (!this.chooseDate.year || !this.chooseDate.month || !this.chooseDate.day) {
                 this.chooseReslt = '请选择时间';
@@ -9609,9 +9610,7 @@ const curDay = curDate.getDate();
             this.chooseDate.year = '';
             this.chooseDate.month = '';
             this.chooseDate.day = '';
-        },
-        //计算当前日期是否高亮
-        highDay: function () {}
+        }
     }
 });
 //-------------------------月份数组拼接 START------------------------------------
@@ -9691,7 +9690,7 @@ exports = module.exports = __webpack_require__(0)();
 exports.i(__webpack_require__(6), "");
 
 // module
-exports.push([module.i, ".datePikcerInputBoX{position:relative;width:360px}.chooseTimeInput{width:360px;border:1px solid #eee;font-size:14px;text-indent:1em}.chooseTimeInput,.datePikcerInputBoX span{height:35px;line-height:35px;cursor:pointer}.datePikcerInputBoX span{position:absolute;top:0;right:0;display:inline-block;padding:0 10px;border-left:1px solid #eee}.datePicker{margin-top:10px}.pageBox{margin:100px}.datePicker{width:350px;border:1px solid #eee;padding:5px}.datePickerHead{color:#999;text-align:center;width:100%;position:relative;margin-bottom:10px;border-bottom:1px solid #eee;cursor:pointer;font-size:0}.datePickerHead>span{display:inline-block;height:50px;line-height:50px;font-size:16px}.datePickerHead>span:hover{color:#333}.datePickerHead .chooseYearMonth{width:150px}.datePickerHead .changeMomth{font-family:aril;font-weight:700;width:25px}.datePickerHead .chooseBox{width:150px;overflow:hidden;border:1px solid #eee;background:#fff;position:absolute;top:50px;left:175px;z-index:99;color:#666}.datePickerHead .chooseYearBox{left:25px}.datePickerHead .chooseBox>span{width:50px;font-size:12px;border-top:1px solid #eee;border-left:1px solid #eee;margin:-1px 0 0 -1px}.datePickerHead .chooseBox>span,.datePickerHead .yearPage span{display:inline-block;height:30px;line-height:30px;cursor:pointer;text-align:center}.datePickerHead .yearPage span{width:50%;border-bottom:1px solid #eee;font-size:16px;font-family:aril;color:#333}.datePickerHead .chooseBox span:hover{background:#f8f8f8;color:#333}.datePickerBody{font-size:0}.datePickerBody p{margin-left:-5px}.datePickerBody span{display:inline-block;width:45px;font-size:12px;margin-bottom:5px;text-align:center;border-radius:5px;background:#fff;margin-left:5px;height:25px;line-height:25px;color:#999}.datePickerBody .weekday{color:#666}.datePickerBody .hasHover:nth-child(7n),.datePickerBody .hasHover:nth-child(7n+1),.datePickerBody .weekday:nth-child(7n),.datePickerBody .weekday:nth-child(7n+1){color:#f30}.datePickerBody .hasHover{background:#fafafa;color:#666}.datePickerBody .hasHover:hover{background:#b2b2b2;color:#fff;cursor:pointer}.datePickerBody .hasHover.u_cf30,.datePickerBody .isToday{color:#fff;background:#8585ad}", ""]);
+exports.push([module.i, ".pageBox{padding:100px 0;width:100%;min-width:500px;color:#999}.content{margin:0 auto;width:360px}.datePikcerInputBoX{position:relative;width:100%;background:#fff}.chooseTimeInput{width:100%;box-sizing:border-box;border:1px solid #9d94b0;font-size:14px;text-indent:1em}.chooseTimeInput,.datePikcerInputBoX span{height:35px;line-height:35px;cursor:pointer}.datePikcerInputBoX span{float:right;position:absolute;top:0;right:0;display:inline-block;padding:0 10px;border-left:1px solid #9d94b0}.datePicker{margin-top:10px;width:350px;border:1px solid #9d94b0;padding:4px;background:#fff}.datePickerHead{color:#999;text-align:center;width:100%;position:relative;margin-bottom:10px;border-bottom:1px solid #9d94b0;cursor:pointer;font-size:0}.datePickerHead>span{display:inline-block;height:50px;line-height:50px;font-size:16px}.datePickerHead>span:hover{color:#333}.datePickerHead .chooseYearMonth{width:150px}.datePickerHead .changeMomth{font-family:aril;font-weight:700;width:25px}.datePickerHead .chooseBox{width:150px;overflow:hidden;border:1px solid #9d94b0;background:#fff;position:absolute;top:50px;left:175px;z-index:99;color:#666}.datePickerHead .chooseYearBox{left:25px}.datePickerHead .chooseBox>span{width:50px;font-size:12px;border-top:1px solid #9d94b0;border-left:1px solid #9d94b0;margin:-1px 0 0 -1px}.datePickerHead .chooseBox>span,.datePickerHead .yearPage span{display:inline-block;height:30px;line-height:30px;cursor:pointer;text-align:center}.datePickerHead .yearPage span{width:50%;border-bottom:1px solid #9d94b0;font-size:16px;font-family:aril;color:#333}.datePickerHead .chooseBox span:hover{background:#f8f8f8;color:#333}.datePickerBody{font-size:0}.datePickerBody p{margin-left:-5px}.datePickerBody span{display:inline-block;width:45px;font-size:12px;margin-bottom:5px;text-align:center;border-radius:5px;background:#fff;margin-left:5px;height:25px;line-height:25px;color:#999}.datePickerBody .weekday{color:#666}.datePickerBody .hasHover:nth-child(7n),.datePickerBody .hasHover:nth-child(7n+1),.datePickerBody .weekday:nth-child(7n),.datePickerBody .weekday:nth-child(7n+1){color:#f30}.datePickerBody .hasHover{background:#fafafa;color:#666}.datePickerBody .hasHover:hover{background:#b2b2b2;color:#fff;cursor:pointer}.datePickerBody .hasHover.u_cf30,.datePickerBody .isToday{color:#fff;background:#8585ad}", ""]);
 
 // exports
 
@@ -9769,6 +9768,7 @@ module.exports = function normalizeComponent (
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
+    staticClass: "content",
     attrs: {
       "id": "app"
     }
@@ -9793,6 +9793,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "click": _vm.showDatePicker
     }
   }), _vm._v(" "), _c('span', {
+    staticClass: "f_disselected",
     on: {
       "click": _vm.clearChoosedTime
     }

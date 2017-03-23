@@ -274,7 +274,7 @@
     .datePickerHead .changeMomth{font-family: aril;font-weight: bold;width: 25px;}
     .datePickerHead .chooseBox {width:150px;overflow: hidden;border: 1px solid #9D94B0;background: #fff;position: absolute;top:50px;left:175px;z-index: 99;color: #666;}
     .datePickerHead .chooseYearBox{left:25px;}
-    .datePickerHead .chooseBox > span{display: inline-block;height: 30px;line-height: 30px;width:50px;font-size:12px;cursor: pointer;text-align: center;border-top:1px solid #9D94B0;border-left:1px solid #9D94B0;margin: -1px 0 0 -1px;}
+    .datePickerHead .chooseBox > span{display: inline-block;height: 30px;line-height: 30px;width:50px;font-size:12px;cursor: pointer;text-align: center;border-top:1px solid #eee;border-left:1px solid #9D94B0;margin: -1px 0 0 -1px;}
     .datePickerHead .yearPage span{display: inline-block;height: 30px;line-height: 30px;width:50%;cursor: pointer;text-align: center;border-bottom:1px solid #9D94B0;font-size: 16px;font-family: aril;color: #333;}
     .datePickerHead .chooseBox span:hover{background: #f8f8f8;color: #333;}
     .datePickerBody{font-size: 0;}
