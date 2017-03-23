@@ -134,7 +134,7 @@
                     startNum = 1;
                     endNum = 12;
                 }
-                for(let i = startNum; i <= endNum; i++){
+                for(var i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
                 this.items = tempArry;

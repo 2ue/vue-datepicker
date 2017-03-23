@@ -112,7 +112,7 @@
             },
             hideChooseBox: function(time) {//隐藏选择年月
                 const self = this;
-                const t = time || 50;
+                const t = time || 100;
                 self.chooseBoxTimer = setTimeout(function () {
                     self.showChooseBox = false;
                 }, t);
@@ -126,15 +126,15 @@
                 this.hideChooseBox();
             },
             getItems: function(){
-                let startNum, endNum, tempArry = [];
+                var startNum, endNum, tempArry = [];
                 if(this.chooseType){
                     startNum = this.YearChangeSyboml - 4;
-                    endNum = +this.YearChangeSyboml + 4;
+                    endNum = this.YearChangeSyboml + 4;
                 }else{
                     startNum = 1;
                     endNum = 12;
                 }
-                for(let i = startNum; i <= endNum; i++){
+                for(var i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
                 this.items = tempArry;
@@ -155,7 +155,7 @@
             },
             hideDatePicker: function(time) {
                 const self = this;
-                const t = time || 50;
+                const t = time || 100;
                 self.datePickerBoxTimer = setTimeout(function () {
                     self.showDatePickerBox = false;
                 }, t)

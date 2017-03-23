@@ -70,29 +70,28 @@
                 YearChangeSyboml: '' //切换年月时标记
             }
         },
-        // computed: {
-        //     items: function () {
-        //         var startNum, endNum, tempArry = [];
-        //         if(this.chooseType){
-        //             startNum = this.chooseDate.year - 4;
-        //             endNum = this.chooseDate.year + 4;
-        //         }else{
-        //             startNum = 1;
-        //             endNum = 12;
-        //         }
-        //         for(var i = startNum; i <= endNum; i++){
-        //             tempArry.push(i);
-        //         };
-        //         this.items = [];
-        //         console.trace(tempArry);
-        //         return tempArry;
-        //     }
-        // },
+        computed: {
+            // items: function () {
+            //     var startNum, endNum, tempArry = [];
+            //     if(this.chooseType){
+            //         startNum = this.chooseDate.year - 4;
+            //         endNum = this.chooseDate.year + 4;
+            //     }else{
+            //         startNum = 1;
+            //         endNum = 12;
+            //     }
+            //     for(var i = startNum; i <= endNum; i++){
+            //         tempArry.push(i);
+            //     };
+            //     this.items = [];
+            //     console.trace(tempArry);
+            //     return tempArry;
+            // }
+        },
         watch: {
             chooseDate: {
                 handler: function(val,oldVal){
                     this.days = getDayArry(this.chooseDate,this.chooseReslt);
-                    console.log(this.days)
                 },
                 deep: true
             }
@@ -102,17 +101,18 @@
             showChooseYearBox: function() {//显示选择年
                 this.YearChangeSyboml = this.chooseDate.year;
                 this.showChooseBox = true;
+                // this.items = [];
                 this.chooseType = true;
-                this.getItems();
+                console.trace(this)
             },
             showChooseMonthBox: function() {//显示选择月
                 this.showChooseBox = true;
+                // this.items = [];
                 this.chooseType = false;
-                this.getItems();
             },
             hideChooseBox: function(time) {//隐藏选择年月
                 const self = this;
-                const t = time || 50;
+                const t = time || 300;
                 self.chooseBoxTimer = setTimeout(function () {
                     self.showChooseBox = false;
                 }, t);
@@ -123,23 +123,24 @@
             chooseYearMonth: function(type,value) {//选择年月
                 const chooseType = !!type ? 'year' : 'month';
                 this.chooseDate[chooseType] = value || this.chooseDate[chooseType];
-                this.hideChooseBox();
+                this.hideChooseBox(1);
+                // this.isChoosed = this.highDay();
             },
             getItems: function(){
-                let startNum, endNum, tempArry = [];
+                var startNum, endNum, tempArry = [];
                 if(this.chooseType){
-                    startNum = this.YearChangeSyboml - 4;
-                    endNum = +this.YearChangeSyboml + 4;
+                    startNum = this.chooseDate.year - 4;
+                    endNum = this.chooseDate.year + 4;
                 }else{
                     startNum = 1;
                     endNum = 12;
                 }
-                for(let i = startNum; i <= endNum; i++){
+                for(var i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
                 this.items = tempArry;
                 console.trace(tempArry);
-            },
+            }
             //----------- 选择年月面板 END ---------------
             //
             //----------- 时间选择面板 START ---------------
@@ -147,15 +148,14 @@
                 const value = event.target.value;
                 const choosedDayArry = value.indexOf('-') > 0 ? value.split('-') : [curYear, curMonth, curDay];
                 this.showDatePickerBox = true;
-                this.chooseDate = {
-                    year: choosedDayArry[0],
-                    month: choosedDayArry[1],
-                    month: choosedDayArry[2],
-                };
+                this.chooseDate.year = choosedDayArry[0];
+                this.chooseDate.month = choosedDayArry[1];
+                this.chooseDate.day = choosedDayArry[2];
+                // this.isChoosed = this.highDay();
             },
             hideDatePicker: function(time) {
                 const self = this;
-                const t = time || 50;
+                const t = time || 300;
                 self.datePickerBoxTimer = setTimeout(function () {
                     self.showDatePickerBox = false;
                 }, t)
@@ -170,20 +170,22 @@
                 const isFirstMonth = this.chooseDate.month == 1;
                 this.chooseDate.month = isFirstMonth ? 12 : this.chooseDate.month - 1;
                 this.chooseDate.year = isFirstMonth ? this.chooseDate.year - 1 : this.chooseDate.year;
+                // this.isChoosed = this.highDay();
             },
             nxtMonth: function() {//下一月
                 const isLastMonth = this.chooseDate.month == 12;
                 this.chooseDate.month = isLastMonth ? 1 : +this.chooseDate.month + 1;
                 this.chooseDate.year = isLastMonth ? +this.chooseDate.year + 1 : this.chooseDate.year;
+                // this.isChoosed = this.highDay();
             },
             //----------- 切换月 END ---------------
             changeYearPagePre: function() {//年翻页：上一页
                 this.YearChangeSyboml = this.YearChangeSyboml - 12;
-                this.getItems();
+                // this.isChoosed = this.highDay();
             },
             changeYearPageNxt: function() {//年翻页：下一页
                 this.YearChangeSyboml = +this.YearChangeSyboml + 12;
-                this.getItems();
+                // this.isChoosed = this.highDay();
             },
             chooseDay: function(index) {//选择天
                 if(!!!index && index != 0) return;
@@ -215,7 +217,7 @@
         const year = showDate.year;
         const month = showDate.month;
         const day = showDate.day;
-        const chooseDateArry = !!chooseReslt && chooseReslt.indexOf('-') >= 0 ? chooseReslt.split('-') : [curYear,curMonth,curDay];
+        const chooseDateArry = !!chooseReslt && chooseReslt.indexOf('-') ? chooseReslt.split('-') : [curYear,curMonth,curDay];
 
         //获取当前月天数数组
         const curMonthDays = getMonthDays(month);
@@ -277,7 +279,7 @@
     .datePickerHead .chooseBox {width:150px;overflow: hidden;border: 1px solid #eee;background: #fff;position: absolute;top:50px;left:175px;z-index: 99;color: #666;}
     .datePickerHead .chooseYearBox{left:25px;}
     .datePickerHead .chooseBox > span{display: inline-block;height: 30px;line-height: 30px;width:50px;font-size:12px;cursor: pointer;text-align: center;border-top:1px solid #eee;border-left:1px solid #eee;margin: -1px 0 0 -1px;}
-    .datePickerHead .yearPage span{display: inline-block;height: 30px;line-height: 30px;width:50%;cursor: pointer;text-align: center;border-bottom:1px solid #eee;font-size: 16px;font-family: aril;color: #333;}
+    .datePickerHead .yearPage span{display: inline-block;height: 30px;line-height: 30px;width:72px;cursor: pointer;text-align: center;border-bottom:1px solid #eee;font-size: 16px;font-family: aril;color: #333;}
     .datePickerHead .chooseBox span:hover{background: #f8f8f8;color: #333;}
     .datePickerBody{font-size: 0;}
     .datePickerBody p{margin-left:-5px;}
