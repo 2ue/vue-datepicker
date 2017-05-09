@@ -55,9 +55,9 @@
             return {
                 chooseReslt: '请选择时间',
                 chooseDate: {
-                    year: curYear,
-                    month: curMonth,
-                    day: curDay
+                    year: '',
+                    month: '',
+                    day: ''
                 },
                 items: [1,2,3,4,5,6,7,8,9,10,11,12], //选择年月存放数据
                 days: getDayArry({year: curYear,month: curMonth,day:curDay}),
@@ -86,13 +86,15 @@
         //         this.items = [];
         //         console.trace(tempArry);
         //         return tempArry;
+        //     },
+        //     chooseReslt: function () {
+        //         return this.chooseDate.year || this.chooseDate.month || this.chooseDate.day ? (this.chooseDate.year + '-' + this.chooseDate.month + '-' + this.chooseDate.day) : '请选择时间';
         //     }
         // },
         watch: {
             chooseDate: {
                 handler: function(val,oldVal){
                     this.days = getDayArry(this.chooseDate,this.chooseReslt);
-                    console.log(this.days)
                 },
                 deep: true
             }
@@ -138,7 +140,6 @@
                     tempArry.push(i);
                 };
                 this.items = tempArry;
-                console.trace(tempArry);
             },
             //----------- 选择年月面板 END ---------------
             //
@@ -190,7 +191,6 @@
                 if(!this.days[index].isCurMonth) return;
                 this.days[index].color = !this.days[index].color;
                 this.chooseDate.day = this.days[index].dayNum;
-                console.log(this.chooseDate)
                 this.showDatePickerBox = false;
                 if(!this.chooseDate.year || !this.chooseDate.month || !this.chooseDate.day){
                     this.chooseReslt = '请选择时间';
@@ -203,6 +203,7 @@
                 this.chooseDate.year = '';
                 this.chooseDate.month = '';
                 this.chooseDate.day = '';
+                this.chooseReslt = '请选择时间';
             }
         }
     };
