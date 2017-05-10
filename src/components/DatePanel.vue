@@ -29,7 +29,7 @@
             <div class="day_box">
                 <span v-for="(item,index) in days" 
                 :class="{'crn_month':item.isCurMonth,'only_day': item.isChoosed && item.isCurMonth}"
-                @click="choosDay(item.dayNum)">{{ item.dayNum }}</span>
+                @click="choosDay(item.dayNum,item.isCurMonth)">{{ item.dayNum }}</span>
             </div>
         </div>
     </div>
@@ -132,8 +132,9 @@ export default {
         changeYearPage: function(_val){
             this.changeYear = this.changeYear + _val;
         },
-        choosDay: function (_day) {
+        choosDay: function (_day,_isCurMonth) {
             var _self = this;
+            if(!_isCurMonth) return;
             _self.choosed.year = _self.panelChoosed.year;
             _self.choosed.month = _self.panelChoosed.month;
             _self.choosed.day = _day;
