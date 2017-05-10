@@ -7,11 +7,3 @@ yarn-error.log*
 .vscode
 .idea
 .project
-/build
-/src
-/config
-/static
-.babelrc
-.editorconfig
-.postcssrc.js
-package.json
