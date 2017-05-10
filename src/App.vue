@@ -51,7 +51,7 @@
 
     export default {
         name: 'app',
-        data () {
+        data: function() {
             return {
                 chooseReslt: '请选择时间',
                 chooseDate: {
@@ -128,7 +128,7 @@
                 this.hideChooseBox();
             },
             getItems: function(){
-                let startNum, endNum, tempArry = [];
+                var startNum, endNum, tempArry = [];
                 if(this.chooseType){
                     startNum = this.YearChangeSyboml - 4;
                     endNum = +this.YearChangeSyboml + 4;
@@ -136,7 +136,7 @@
                     startNum = 1;
                     endNum = 12;
                 }
-                for(let i = startNum; i <= endNum; i++){
+                for(var i = startNum; i <= endNum; i++){
                     tempArry.push(i);
                 };
                 this.items = tempArry;
@@ -222,9 +222,9 @@
         const firstDay = getDayInWeek(year, (month - 1), 1); //当前月第一天是星期几
         const allDays =  Math.ceil((+curMonthDays + firstDay) / 7) * 7;
         
-        let dayArry = [];
+        var dayArry = [];
 
-        for(let i = 1; i <= allDays; i++){
+        for(var i = 1; i <= allDays; i++){
 
             const isPre = i <= firstDay;
             const isNxt = i > (firstDay + curMonthDays);
