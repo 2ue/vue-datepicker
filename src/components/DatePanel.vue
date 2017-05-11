@@ -15,8 +15,8 @@
                 @mouseout="hidePicker" 
                 v-show="showChooseBox">
                 <p class="change_year" v-if="changeType === 'y'">
-                    <span @click="changeYearPage(-8)">&lt;</span>
-                    <span @click="changeYearPage(8)">&gt;</span>
+                    <span @click="changeYearPage" changeval="-8">&lt;</span>
+                    <span @click="changeYearPage" changeval="8">&gt;</span>
                 </p>
                 <span class="item" 
                     v-for="(item,index) in items" 
@@ -129,16 +129,17 @@ export default {
             this.changeType === 'y' ? this.panelChoosed.year = _val : this.panelChoosed.month = _val;
             this.showChooseBox = false;
         },
-        changeYearPage: function(_val){
+        changeYearPage: function(event){
+            event.stopPropagation();
+            var _val = parseInt(event.target.getAttribute('changeval'));
             this.changeYear = this.changeYear + _val;
         },
         choosDay: function (_day,_isCurMonth) {
-            var _self = this;
             if(!_isCurMonth) return;
-            _self.choosed.year = _self.panelChoosed.year;
-            _self.choosed.month = _self.panelChoosed.month;
-            _self.choosed.day = _day;
-            _self.hidePanel(4)
+            this.choosed.year = this.panelChoosed.year;
+            this.choosed.month = this.panelChoosed.month;
+            this.choosed.day = _day;
+            this.hidePanel(4)
         }
     }
 };
