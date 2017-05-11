@@ -24,5 +24,9 @@ export default {
     color: #2c3e50;
     margin-top: 60px;
 }
+img{
+    width: 80px;
+    height: auto;
+}
 .content-box{padding: 20px 0;}
 </style>
