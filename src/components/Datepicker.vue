@@ -9,58 +9,58 @@
 </template>
 <script>
 
-import DatePanel from './DatePanel'
-export default {
+  import DatePanel from './DatePanel'
+  export default {
     name: 'datepicker',
     components:{ DatePanel },
     data () {
-        return {
-            //panel是否显示
-            panelStatus: false,
-            //一个setTimeout的储存器
-            panelTimer:'',
-            //保存选择的年月日
-            choosed:{
-                year: '',
-                month: '',
-                day: ''
-            }
+      return {
+        //panel是否显示
+        panelStatus: false,
+        //一个setTimeout的储存器
+        panelTimer:'',
+        //保存选择的年月日
+        choosed:{
+          year: '',
+          month: '',
+          day: ''
         }
+      }
     },
     computed: {
-        //根据选择的年月计算最终显示的结果
-        reslt:function () {
-            var _self = this;
-            var year = _self.choosed.year;
-            var month = _self.choosed.month;
-            var day = _self.choosed.day;
-            return !year || !month || !day ? 'please choose date' : (year + '-' + month + '-' + day);
-        }  
+      //根据选择的年月计算最终显示的结果
+      reslt:function () {
+        const _self = this;
+        const year = _self.choosed.year;
+        const month = _self.choosed.month;
+        const day = _self.choosed.day;
+        return !year || !month || !day ? 'please choose date' : (year + '-' + month + '-' + day);
+      }
     },
     methods: {
-        showPanel: function () {
-            this.panelStatus = true;
-        },
-        hidePanel: function (_t) {
-            var _self = this;
-            _self.clearPanelTimer();
-            var timer = !!_t && !isNaN(parseInt(_t)) ? parseInt(_t) : 500;
-            _self.panelTimer = setTimeout(function() {
-                _self.panelStatus = false;
-            }, timer);
-        },
-        clearPanelTimer: function () {
-            clearTimeout(this.panelTimer);
-        },
-        clearChoosed: function(){
-            this.choosed = {
-                year: '',
-                month: '',
-                day: ''
-            }
+      showPanel: function () {
+        this.panelStatus = true;
+      },
+      hidePanel: function (_t) {
+        const _self = this;
+        _self.clearPanelTimer();
+        const timer = !!_t && !isNaN(parseInt(_t)) ? parseInt(_t) : 500;
+        _self.panelTimer = setTimeout(function() {
+          _self.panelStatus = false;
+        }, timer);
+      },
+      clearPanelTimer: function () {
+        clearTimeout(this.panelTimer);
+      },
+      clearChoosed: function(){
+        this.choosed = {
+          year: '',
+          month: '',
+          day: ''
         }
+      }
     }
-}
+  }
 </script>
 <style lang="less" scoped>
 .date_picker {
