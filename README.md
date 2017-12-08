@@ -1,3 +1,5 @@
+> 本组件已合并到我的另一个项目[一个vui框架](https://github.com/2ue/vui)，并对代码做了优化.此处是[demo](https://2ue.github.io/vui/#/datePicker)
+
 # vue-datepicker
 
 > 使用官方提供的vue-simple-template配置打包，写的一个简单的vue-datepicker。支持选择功能，功能比较简单，欢迎大家拍砖.
